@@ -1,0 +1,32 @@
+header {
+  position: relative;
+}
+header h1 {
+  font-size: 60px;
+  display: flex;
+  width: 60%;
+}
+.search-input {
+  width: 100%;
+  padding: 1.5rem;
+  border-radius: 20px;
+  backdrop-filter: blur(3.1px);
+  background: rgba(255, 255, 255, 0.07);
+
+  color: #fff;
+  font-size: 20px;
+  border: 1px #fff solid;
+  outline: none;
+  margin-bottom: 2rem;
+}
+.search-input:focus {
+  box-shadow: 1px 7px 31px -3px rgba(255, 255, 255, 0.75);
+  -webkit-box-shadow: 1px 7px 31px -3px rgba(255, 255, 255, 0.75);
+  -moz-box-shadow: 1px 7px 31px -3px rgba(255, 255, 255, 0.75);
+}
+.containerCards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-column-gap: 20px;
+  grid-row-gap: 20px;
+}
