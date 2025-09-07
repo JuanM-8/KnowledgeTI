@@ -12,7 +12,7 @@ export function NotFoundPage() {
         </Link>
         </div>
         <div>
-          <img src="../IMG/404.png" alt="" />
+          <img src="/IMG/404.avif" alt="" />
         </div>
         
       </div>
