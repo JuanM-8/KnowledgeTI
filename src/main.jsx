@@ -2,6 +2,7 @@ import { createRoot } from "react-dom/client";
 import { Home } from "./pages/Home.jsx"; //pages
 import { Login } from "./pages/Login.jsx"; //pages
 import { NotFoundPage } from "./pages/NotFoundPage.jsx"; //pages
+import { Footer } from "./components/Footer.jsx";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { AuthProvider } from "./components/Authcontext.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
@@ -27,5 +28,7 @@ const router = createBrowserRouter([
 createRoot(document.getElementById("root")).render(
   <AuthProvider>
     <RouterProvider router={router} />
+   <Footer></Footer>
   </AuthProvider>
+  
 );

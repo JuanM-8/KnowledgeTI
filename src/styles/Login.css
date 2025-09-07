@@ -55,7 +55,7 @@ form input[type="password"] {
   outline: none;
 }
 
-button {
+.login {
   width: max-content;
 
   background: transparent;
@@ -71,7 +71,7 @@ button {
   box-shadow: 0 0 10px #0ff, inset 0 0 10px #0ff;
 }
 
-button:hover {
+.login:hover {
   background: #0ff;
   color: #111;
   box-shadow: 0 0 20px #0ff, inset 0 0 20px #0ff;

@@ -1,0 +1,87 @@
+[
+  {
+    "categoria": "soporte técnico",
+    "problema": "Falanet no funciona en Edge",
+    "solucion": "Ir a Panel de control → Iconos pequeños → Opciones de internet → Opciones avanzadas → habilitar extensión de terceros + marcar opción TLS → Aplicar y aceptar"
+  },
+  {
+    "categoria": "soporte técnico",
+    "problema": "Error en Citrix en PC",
+    "solucion": "Salir sesión de Citrix en google → matar procesos Citrix desde administrador de tareas, volver a abir citrix"
+  },
+  {
+    "categoria": "impresoras",
+    "problema": "Drivers de las impresoras",
+    "solucion": "Servidor: 10.120.111.105 → Carpeta compartida con drivers"
+  },
+  {
+    "categoria": "biométricos",
+    "problema": "Relojes biométricos Geovictoria",
+    "solucion": "Usuario enrolador 15/Contraseña 2025, admin 17/Contraseña 2385. Configuración en .12 y .13"
+  },
+  {
+    "categoria": "datáfonos",
+    "problema": "Datáfono Redeban pantalla azul",
+    "solucion": "Cambiarlo → deshabilitar y volver a habilitar"
+  },
+  {
+    "categoria": "datáfonos",
+    "problema": "Habilitar Datáfono Redeban",
+    "solucion": "F2 → ver → Contraseña 1526 → opcion 6 → deshabilitar → opcion 6 de nuevo → habilitar → verde → rojo → rojo → verde → verde"
+  },
+  {
+    "categoria": "servidores",
+    "problema": "Acceso a servidor",
+    "solucion": "Comando: mstsc /admin"
+  },
+  {
+    "categoria": "contraseñas",
+    "problema": "Usuario de pos Regcol",
+    "solucion": "Contraseña: f414.16$Rf"
+  },
+  {
+    "categoria": "contraseñas",
+    "problema": "Usuario de pos pos0#tienda",
+    "solucion": "Contraseña: Posfal.0#tienda"
+  },
+  {
+    "categoria": "contraseñas",
+    "problema": "Ingresar a admin PDT",
+    "solucion": "Contraseña: $1mb0l"
+  },
+  {
+    "categoria": "contraseñas",
+    "problema": "WiFi Falabella VIP",
+    "solucion": "Contraseña: falab311a_vip"
+  },
+  {
+    "categoria": "contraseñas",
+    "problema": "Wifi de WiFi Falacorp",
+    "solucion": "Contraseña: Ipc@rd$uv@173"
+  },
+  {
+    "categoria": "contraseñas",
+    "problema": "WiFi Exhibiciones",
+    "solucion": "Contraseña: 3xh1b1c10n3s"
+  },
+  {
+    "categoria": "contraseñas",
+    "problema": "WiFi Apple",
+    "solucion": "Contraseña: 4ppl3_F4l4b3ll4"
+  },
+  {
+    "categoria": "aplicaciones",
+    "problema": "Error en Teams no aparecen los equipos ni los archivos",
+    "solucion": "Ir a configuración del PC → Aplicaciones → Buscar Teams → Configuración avanzada → Reparar"
+  },
+  {
+    "categoria": "contraseñas",
+    "problema": "Ingresar a Pathfinder",
+    "solucion": "Contraseña: stgchile*"
+  },
+  {
+    "categoria": "servidores",
+    "problema": "Cambiar apuntamiendo de servidores POS",
+    "solucion": "Entrar como admin a la POS → Win+R → driver → etc → hosts"
+  }
+]

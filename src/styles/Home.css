@@ -25,8 +25,31 @@ header h1 {
   -moz-box-shadow: 1px 7px 31px -3px rgba(255, 255, 255, 0.75);
 }
 .containerCards {
+  margin-top: 2rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-column-gap: 20px;
   grid-row-gap: 20px;
+}
+.nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+button {
+
+  padding: 1rem;
+  border-radius: 20px;
+  box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.27);
+  transition: 0.2s all;
+  background: rgba(255, 255, 255, 0.07);
+  border-radius: 16px;
+  backdrop-filter: blur(3.1px);
+ cursor: pointer;
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  text-transform: uppercase;
+}
+button:hover{
+  transform: scale(1.03);
 }

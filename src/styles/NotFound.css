@@ -1,0 +1,22 @@
+body {
+  background: black ;
+}
+img {
+  width: 550px;
+}
+
+.container-404 {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.error {
+  text-align: center;
+  place-content: center;
+  font-size: 4rem;
+  > h1,
+  h3 {
+    filter: drop-shadow(0 0 0.75rem rgb(182, 182, 182));
+    margin: 0;
+  }
+}

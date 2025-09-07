@@ -12,3 +12,24 @@ body {
   background-size: cover;
   background-attachment: fixed; /* 👈 Esto lo deja estático */
 }
+::-webkit-scrollbar {
+  width: 8px;
+  background: rgb(1, 1, 33);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgb(1, 1, 33);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+footer {
+  margin-top: auto;
+  text-align: center;
+  padding: 1rem 0;
+  color: #ffffff73;
+  font-size: 0.9rem;
+}

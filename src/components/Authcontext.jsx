@@ -1,26 +1,32 @@
+// Importo herramientas de React que voy a usar
 import { createContext, useContext, useState } from "react";
 
-// AuthContex llevará información a toda la app
+// Creo un "Contexto": una cajita para guardar y compartir datos
 const AuthContext = createContext();
 
-// El "router WiFi" que envía la señal a toda la app. "children" son las partes de la app que usan la señal
+// Este componente va a envolver a otros y darles acceso al "contexto"
 export function AuthProvider({ children }) {
-  const [isAuth, setIsAuth] = useState(false); //guarda si alguien está logueado (true) o no (false)...Empezamos con "no logueado"
+  // Creo una variable de estado: "isAuth" empieza en false (no logueado)
+  // "setIsAuth" sirve para cambiar ese valor más adelante
+  const [isAuth, setIsAuth] = useState(false);
 
-  // Una función que "conecta" a la persona, cambiando la caja a "logueado"
+  // Creo una función "login" que cambia isAuth a true (sí está logueado)
   function login() {
-    setIsAuth(true); // Ahora está logueado
+    setIsAuth(true);
   }
 
-  // Enviamos la señal WiFi con la información (si está logueado, login, logout) a toda la app
+  // Devuelvo un "Provider": es el que reparte el contexto a los hijos
+  // Dentro del value pongo qué datos quiero compartir: isAuth y login
+  // {children} son todos los componentes hijos que envuelvo con este Provider
   return (
     <AuthContext.Provider value={{ isAuth, login }}>
-      {children} {/* Aquí van todas las partes de la app que usan la señal */}
+      {children}
     </AuthContext.Provider>
   );
 }
 
-// Un "cable" que conecta cualquier parte de la app a la señal WiFi para usar la información
+// Creo un "hook" personalizado: useAuth()
+// Esto me deja acceder fácilmente a los datos guardados en el contexto
 export function useAuth() {
-  return useContext(AuthContext); // Devuelve la información de la señal (isAuth, login, logout)
+  return useContext(AuthContext);
 }

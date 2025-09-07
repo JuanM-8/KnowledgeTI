@@ -1,12 +1,19 @@
-import '../styles/Cards.css'
-export function Cards({categoria,problema}){
-    return(
-        <>
-        <div className="card">
-            <h3>{categoria}</h3>
-            <h1>{problema}</h1>
-            <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Qui harum odit iste dolore. Iusto, aliquam animi quos porro esse consequatur quidem ea quo officia aut cum reprehenderit provident sit! Amet!</p>
+import "../styles/Cards.css";
+export function Cards({ resultados }) {
+  if (resultados.length === 0) {
+    return (
+      <p className="NoCoincidencia">No se encontraron coincidencias. 😟</p>
+    );
+  }
+  return (
+    <>
+      {resultados.map((item) => (
+        <div className="card" >
+          <h3 data-status={item.categoria}>{item.categoria}</h3>
+          <h1>{item.problema}</h1>
+          <p>{item.solucion}</p>
         </div>
-        </>
-    )
+      ))}
+    </>
+  );
 }
