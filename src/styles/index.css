@@ -1,13 +1,14 @@
 @import url("https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300..700&display=swap");
 body {
   height: 100vh;
-
-  max-width: 70rem; 
+  max-width: 70rem;
   place-content: center;
   margin: auto;
-  background: url("src/IMG/ChatGPT Image 4 sept 2025, 21_49_11.png");
-  background-repeat: repeat;
-  background-size: cover;
+  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
+    url("src/IMG/Background.png");
   color: #fff;
   font-family: Space Grotesk, Space Grotesk Fallback;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed; /* 👈 Esto lo deja estático */
 }

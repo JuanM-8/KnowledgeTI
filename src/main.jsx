@@ -1,12 +1,11 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
+import { Home } from "./pages/Home.jsx"; //pages
+import { Login } from "./pages/Login.jsx"; //pages
+import { NotFoundPage } from "./pages/NotFoundPage.jsx"; //pages
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { AuthProvider } from "./components/Authcontext.jsx";
+import PrivateRoute from "./components/PrivateRoute.jsx";
 import "./styles/index.css";
-import Home from "./pages/Home.jsx";
-import { Login } from "./pages/Login.jsx";
-//react router
-import {  createBrowserRouter ,RouterProvider} from "react-router-dom";
-import { NotFoundPage } from "./pages/NotFoundPage.jsx";
-
 const router = createBrowserRouter([
   {
     path: "/",
@@ -14,16 +13,19 @@ const router = createBrowserRouter([
   },
   {
     path: "/home",
-    element: <Home />,
+    element: (
+      <PrivateRoute>
+        <Home />
+      </PrivateRoute>
+    ),
   },
   {
-    path:"*",
-    element:<NotFoundPage/>
-  }
+    path: "*",
+    element: <NotFoundPage />,
+  },
 ]);
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
-    <RouterProvider router={router}/>
-
-  </StrictMode>
-);  
+  <AuthProvider>
+    <RouterProvider router={router} />
+  </AuthProvider>
+);
