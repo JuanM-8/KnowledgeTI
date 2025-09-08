@@ -4,32 +4,44 @@ body {
   max-width: 70rem;
   place-content: center;
   margin: auto;
-  background: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)),
-    url("/IMG/Background.avif");
+  background: #121212;
   color: #fff;
   font-family: Space Grotesk, Space Grotesk Fallback;
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-attachment: fixed; /* 👈 Esto lo deja estático */
 }
+.glow {
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+  width: 50%;
+  height: 50%;
+  border-radius: 30%;
+  display: block;
+  background: radial-gradient(#064625aa 20%, #7ec97655);
+  transform: translate(-50%, -50%);
+  background-attachment: fixed;
+  filter: blur(100px);
+  z-index: -1;
+}
+
 ::-webkit-scrollbar {
   width: 8px;
-  background: rgb(1, 1, 33);
+  background: rgb(12, 12, 12);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgb(1, 1, 33);
-  border-radius: 4px;
+  background: darkgray;
+  
 }
 
-::-webkit-scrollbar-track {
-  background: transparent;
-}
+
 
 footer {
-  margin-top: auto;
-  text-align: center;
-  padding: 1rem 0;
+     position: fixed;   /* fijo en la pantalla */
+  bottom: 0;
+  right: 0;
+  padding: 0.5rem 1rem;
   color: #ffffff73;
   font-size: 0.9rem;
+  background: transparent; /* o ponle un fondo si quieres que destaque */
 }

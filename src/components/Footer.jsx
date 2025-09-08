@@ -1,3 +1,3 @@
 export function Footer(){
-    return <footer>∞ Juan Marin ∞</footer>;
+    return <footer>Desarrollado por: Juan Marin</footer>;
 }

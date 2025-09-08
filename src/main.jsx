@@ -27,8 +27,8 @@ const router = createBrowserRouter([
 ]);
 createRoot(document.getElementById("root")).render(
   <AuthProvider>
+    <span class="glow"></span>
     <RouterProvider router={router} />
-   <Footer></Footer>
+    <Footer></Footer>
   </AuthProvider>
-  
 );

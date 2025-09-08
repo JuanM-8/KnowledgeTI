@@ -1,18 +1,28 @@
 header {
-  position: relative;
+  flex-direction: column;
+  display: flex;
+  align-items: self-start;
+  width: 100%;
+
+  > div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
 }
+
 header h1 {
   font-size: 60px;
-  display: flex;
   width: 60%;
 }
 .search-input {
+  box-sizing: border-box;
+  place-content: center;
   width: 100%;
   padding: 1.5rem;
   border-radius: 20px;
   backdrop-filter: blur(3.1px);
   background: rgba(255, 255, 255, 0.07);
-
   color: #fff;
   font-size: 20px;
   border: 1px #fff solid;
@@ -25,20 +35,22 @@ header h1 {
   -moz-box-shadow: 1px 7px 31px -3px rgba(255, 255, 255, 0.75);
 }
 .containerCards {
+  background-color: transparent;
   margin-top: 2rem;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   grid-column-gap: 20px;
   grid-row-gap: 20px;
+  padding-bottom: 2rem;
 }
 .nav {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-evenly;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+
+  gap: 1rem;
 }
 
 button {
-
   padding: 1rem;
   border-radius: 20px;
   box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.27);
@@ -46,10 +58,33 @@ button {
   background: rgba(255, 255, 255, 0.07);
   border-radius: 16px;
   backdrop-filter: blur(3.1px);
- cursor: pointer;
+  cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.22);
   text-transform: uppercase;
 }
-button:hover{
+button:hover {
   transform: scale(1.03);
+}
+
+@media (max-width: 768px) {
+  header h1 {
+    width: 100%;
+    font-size: 30px;
+    text-align: center;
+  }
+  .search-input {
+    align-items: center;
+    width: 80%;
+  }
+  .containerCards {
+    grid-template-columns: none;
+    justify-content: center;
+
+    grid-row-gap: 20px;
+  }
+  .nav{
+    grid-template-columns:repeat(8,1fr);
+    overflow-x: scroll;
+    padding: 1rem;
+  }
 }

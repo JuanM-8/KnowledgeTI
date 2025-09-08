@@ -44,17 +44,21 @@ export function Home() {
     <>
       <header>
         <h1>Preguntas y problemas comunes</h1>
-        <input
-          className="search-input"
-          type="text"
-          value={busqueda}
-          autoFocus
-          placeholder="Introduce aqui tu pregunta o problema"
-          onChange={(e) => setBusqueda(e.target.value)}
-        />
+        <div>
+          <input
+            className="search-input"
+            type="text"
+            value={busqueda}
+            autoFocus
+            placeholder="Introduce aqui tu pregunta o problema"
+            onChange={(e) => setBusqueda(e.target.value)}
+          />
+        </div>
       </header>
       <div className="nav">
-        <button onClick={() => setBusqueda("")} style={{color:"white"}}>Todas</button>
+        <button onClick={() => setBusqueda("")} style={{ color: "white" }}>
+          Todas
+        </button>
         <button
           onClick={() => setBusqueda("impresoras")}
           data-status="impresoras"
