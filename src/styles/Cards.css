@@ -40,7 +40,9 @@
 [data-status="soporte técnico"]  {
   color: var(--color-soporte-técnico);
 }
-
+[data-status=""]  {
+  color:white;
+}
 [data-status="datáfonos"]  {
   color: var(--color-datafonos);
 }

@@ -5,41 +5,22 @@ import data from "../Data.json";
 
 export function Home() {
   const [busqueda, setBusqueda] = useState("");
-
+  function normalizar(texto) {
+    return texto
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  }
   const resultadosFiltrados = data.filter((item) => {
     return (
-      item.problema
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .includes(
-          busqueda
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-        ) ||
-      item.solucion
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .includes(
-          busqueda
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-        ) ||
-      item.categoria
-        .toLowerCase()
-        .normalize("NFD")
-        .replace(/[\u0300-\u036f]/g, "")
-        .includes(
-          busqueda
-            .toLowerCase()
-            .normalize("NFD")
-            .replace(/[\u0300-\u036f]/g, "")
-        )
+      normalizar(item.problema).includes(normalizar(busqueda)) ||
+      normalizar(item.solucion).includes(normalizar(busqueda)) ||
+      normalizar(item.categoria).includes(normalizar(busqueda))
     );
   });
+  const cat = [
+    "",...new Set(data.map(item =>item.categoria))
+  ].sort()
   return (
     <>
       <header>
@@ -56,53 +37,13 @@ export function Home() {
         </div>
       </header>
       <div className="nav">
-        <button onClick={() => setBusqueda("")} style={{ color: "white" }}>
-          Todas
-        </button>
-        <button
-          onClick={() => setBusqueda("impresoras")}
-          data-status="impresoras"
-        >
-          Impresoras
-        </button>
-        <button
-          onClick={() => setBusqueda("datáfonos")}
-          data-status="datáfonos"
-        >
-          Datáfonos
-        </button>
-        <button
-          onClick={() => setBusqueda("servidores")}
-          data-status="servidores"
-        >
-          Servidores
-        </button>
-        <button
-          onClick={() => setBusqueda("contraseñas")}
-          data-status="contraseñas"
-        >
-          Contraseñas
-        </button>
-
-        <button
-          onClick={() => setBusqueda("aplicaciones")}
-          data-status="aplicaciones"
-        >
-          Aplicaciones
-        </button>
-
-        <button
-          onClick={() => setBusqueda("biométricos")}
-          data-status="biométricos"
-        >
-          Biométricos
-        </button>
-        <button
-          onClick={() => setBusqueda("soporte técnico")}
-          data-status="soporte técnico"
-        >
-          Soporte técnico
-        </button>
+        {cat.map((item) => {
+          return (
+            <button className="home-button" data-status={item} onClick={() => setBusqueda(item)}>
+              {item == "" ? "Todas" : item}
+            </button>
+          );
+        })}
       </div>
       <div>
         <div className="containerCards">

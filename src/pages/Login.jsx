@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function Login() {
+  
   const { login } = useAuth(); // traemos la función login() de la cajita mágica
   const navigate = useNavigate();
   const [username, setUsername] = useState("");
@@ -12,9 +13,10 @@ export function Login() {
 
   function handleSubmit(e) {
     e.preventDefault();
-
+    
+    console.log("ok")
     // 🚨 validamos las credenciales falsas
-    if (username === "admin" && password === "1234") {
+    if (username === "Admin" || username==="admin"  && password === "1234") {
       login(); // marcamos como logueado
       navigate("/home"); // redirigimos a la página Home
     } else {
@@ -42,7 +44,9 @@ export function Login() {
             onChange={(e) => setPassword(e.target.value)}
             required
           />
-          <button className="login" type="submit">Login</button>
+          <button className="login-button" type="submit">
+            Login
+          </button>
         </form>
         {error && <p style={{ color: "red" }}>{error}</p>}
       </div>

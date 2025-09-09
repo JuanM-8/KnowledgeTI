@@ -52,7 +52,7 @@ form input[type="password"] {
 form input::placeholder {
   color: rgba(255, 255, 255, 0.7);
 }
-.login {
+.login-button {
   width: max-content;
 
   background: transparent;
@@ -68,7 +68,7 @@ form input::placeholder {
   box-shadow: 0 0 10px #0ff, inset 0 0 10px #0ff;
 }
 
-.login:hover {
+.login-button {
   background: #0ff;
   color: #111;
   box-shadow: 0 0 20px #0ff, inset 0 0 20px #0ff;

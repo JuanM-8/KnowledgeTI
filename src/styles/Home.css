@@ -50,19 +50,19 @@ header h1 {
   gap: 1rem;
 }
 
-button {
+.home-button {
   padding: 1rem;
   border-radius: 20px;
   box-shadow: 0px 0px 10px 0px rgba(255, 255, 255, 0.27);
   transition: 0.2s all;
-  background: rgba(255, 255, 255, 0.07);
+  background: rgb(0 0 0 / 37%);
   border-radius: 16px;
   backdrop-filter: blur(3.1px);
   cursor: pointer;
   border: 1px solid rgba(255, 255, 255, 0.22);
   text-transform: uppercase;
 }
-button:hover {
+.home-button:hover {
   transform: scale(1.03);
 }
 
@@ -82,8 +82,8 @@ button:hover {
 
     grid-row-gap: 20px;
   }
-  .nav{
-    grid-template-columns:repeat(8,1fr);
+  .nav {
+    grid-template-columns: repeat(8, 1fr);
     overflow-x: scroll;
     padding: 1rem;
   }
