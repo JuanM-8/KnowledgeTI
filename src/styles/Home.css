@@ -65,7 +65,28 @@ header h1 {
 .home-button:hover {
   transform: scale(1.03);
 }
+.logout-btn{
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  width: max-content;
+  background: transparent;
+  border: 2px solid #0ff;
+  color: #0ff;
+  font-size: 18px;
+  padding: 12px 24px;
+  border-radius: 6px;
+  cursor: pointer;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: 0.3s;
+  box-shadow: 0 0 10px #0ff, inset 0 0 10px #0ff;
 
+  &&:hover{
+    background: #0ff;
+    color: #121212;
+  }
+}
 @media (max-width: 768px) {
   header h1 {
     width: 100%;

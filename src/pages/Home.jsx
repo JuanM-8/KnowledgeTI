@@ -2,8 +2,10 @@ import "../styles/Home.css";
 import { useState } from "react";
 import { Cards } from "../components/Cards";
 import data from "../Data.json";
+import { useAuth0 } from "@auth0/auth0-react";
 
 export function Home() {
+  const{logout}=useAuth0()
   const [busqueda, setBusqueda] = useState("");
   function normalizar(texto) {
     return texto
@@ -23,6 +25,7 @@ export function Home() {
   ].sort()
   return (
     <>
+    <button className="logout-btn" onClick={()=>logout()}>Salir</button>
       <header>
         <h1>Preguntas y problemas comunes</h1>
         <div>

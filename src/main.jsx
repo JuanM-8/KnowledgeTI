@@ -1,34 +1,20 @@
 import { createRoot } from "react-dom/client";
-import { Home } from "./pages/Home.jsx"; //pages
-import { Login } from "./pages/Login.jsx"; //pages
-import { NotFoundPage } from "./pages/NotFoundPage.jsx"; //pages
 import { Footer } from "./components/Footer.jsx";
-import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { AuthProvider } from "./components/Authcontext.jsx";
-import PrivateRoute from "./components/PrivateRoute.jsx";
+import { Auth0Provider } from "@auth0/auth0-react";
+import App from "./pages/App.jsx";
+
 import "./styles/index.css";
-const router = createBrowserRouter([
-  {
-    path: "/",
-    element: <Login />,
-  },
-  {
-    path: "/home",
-    element: (
-      <PrivateRoute>
-        <Home />
-      </PrivateRoute>
-    ),
-  },
-  {
-    path: "*",
-    element: <NotFoundPage />,
-  },
-]);
 createRoot(document.getElementById("root")).render(
-  <AuthProvider>
+  <Auth0Provider
+    domain="dev-7t8d8ad8cja764ah.us.auth0.com"
+    clientId="FyewTQtYzujPziWlo90dUZAKbfXQuFrQ"
+    authorizationParams={{
+      prompt: "login",
+      redirect_uri: window.location.origin,
+    }}
+  >
     <span className="glow"></span>
-    <RouterProvider router={router} />
+    <App />
     <Footer></Footer>
-  </AuthProvider>
+  </Auth0Provider>
 );
