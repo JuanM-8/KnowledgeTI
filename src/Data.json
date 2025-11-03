@@ -6,6 +6,11 @@
   },
   {
     "categoria": "soporte técnico",
+    "problema": "NCR error al cargar",
+    "solucion": "Reiniciar la pos y/o verificar el servicio de NCR loader este 'started'"
+  },
+  {
+    "categoria": "soporte técnico",
     "problema": "Error en Citrix en PC",
     "solucion": "Salir sesión de Citrix en google → matar procesos Citrix desde administrador de tareas, volver a abir citrix"
   },
@@ -17,7 +22,7 @@
   {
     "categoria": "biométricos",
     "problema": "Relojes biométricos Geovictoria",
-    "solucion": "Usuario enrolador 15/Contraseña 2025, admin 17/Contraseña 2385. Configuración en .12 y .13"
+    "solucion": "Usuario enrolador 15/Contraseña ****, admin 17/Contraseña ****. Configuración en .12 y .13"
   },
   {
     "categoria": "datáfonos",
@@ -27,7 +32,7 @@
   {
     "categoria": "datáfonos",
     "problema": "Habilitar Datáfono Redeban",
-    "solucion": "F2 → ver → Contraseña 1526 → opcion 6 → deshabilitar → opcion 6 de nuevo → habilitar → verde → rojo → rojo → verde → verde"
+    "solucion": "F2 → ver → Contraseña **** → opcion 6 → deshabilitar → opcion 6 de nuevo → habilitar → verde → rojo → rojo → verde → verde"
   },
   {
     "categoria": "servidores",
@@ -37,37 +42,42 @@
   {
     "categoria": "contraseñas",
     "problema": "Usuario de pos Regcol",
-    "solucion": "Contraseña: f414.16$Rf"
+    "solucion": "Contraseña: **********"
+  },
+  {
+    "categoria": "contraseñas",
+    "problema": "Usuario de cuents Apple plataformaretailcolombia",
+    "solucion": "Contraseña: **********"
   },
   {
     "categoria": "contraseñas",
     "problema": "Usuario de pos pos0#tienda",
-    "solucion": "Contraseña: Posfal.0#tienda"
+    "solucion": "Contraseña: ***************"
   },
   {
     "categoria": "contraseñas",
     "problema": "Ingresar a admin PDT",
-    "solucion": "Contraseña: $1mb0l"
+    "solucion": "Contraseña: ******"
   },
   {
     "categoria": "contraseñas",
     "problema": "WiFi Falabella VIP",
-    "solucion": "Contraseña: falab311a_vip"
+    "solucion": "Contraseña: *************"
   },
   {
     "categoria": "contraseñas",
     "problema": "Wifi de WiFi Falacorp",
-    "solucion": "Contraseña: Ipc@rd$uv@173"
+    "solucion": "Contraseña: *************"
   },
   {
     "categoria": "contraseñas",
     "problema": "WiFi Exhibiciones",
-    "solucion": "Contraseña: 3xh1b1c10n3s"
+    "solucion": "Contraseña: ************"
   },
   {
     "categoria": "contraseñas",
     "problema": "WiFi Apple",
-    "solucion": "Contraseña: 4ppl3_F4l4b3ll4"
+    "solucion": "Contraseña: ***************"
   },
   {
     "categoria": "aplicaciones",
@@ -77,7 +87,7 @@
   {
     "categoria": "contraseñas",
     "problema": "Ingresar a Pathfinder",
-    "solucion": "Contraseña: stgchile*"
+    "solucion": "Contraseña: *********"
   },
   {
     "categoria": "servidores",

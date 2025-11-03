@@ -31,17 +31,26 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: darkgray;
-  
 }
 
-
-
 footer {
-     position: fixed;   /* fijo en la pantalla */
+  position: fixed;
   bottom: 0;
   right: 0;
   padding: 0.5rem 1rem;
   color: #ffffff73;
   font-size: 0.9rem;
-  background: transparent; /* o ponle un fondo si quieres que destaque */
+  background: transparent;
+  width: 100%;
+  place-items: end;
+}
+.img-footer {
+  position: relative;
+}
+.img-footer img {
+  width: 50px;
+  position: absolute;
+  left: 50%;
+  bottom: 10px;
+  transform: translate(-50%);
 }
