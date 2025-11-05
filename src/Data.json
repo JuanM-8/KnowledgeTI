@@ -86,12 +86,33 @@
   },
   {
     "categoria": "contraseñas",
-    "problema": "Ingresar a Pathfinder",
+    "problema": "Salir al menu de la Pathfinder",
     "solucion": "Contraseña: *********"
   },
   {
     "categoria": "servidores",
     "problema": "Cambiar apuntamiendo de servidores POS",
     "solucion": "Entrar como admin a la POS → Win+R → driver → etc → hosts"
-  }
+  },
+  {
+    "categoria": "aplicaciones",
+    "problema": "Error acceso a citrix",
+    "solucion": "Para ingresar a las apps de citrix la red debe ser corporativa ya sea Falacorp o por LAN"
+  },
+  {
+    "categoria":"contraseñas",
+    "problema":"Acceso a cotorra",
+    "solucion":"Usuario y contraseña: rf "
+  },
+  
+{
+  "categoria":"datáfonos",
+  "problema":"Teclado bloqueado",
+  "solucion":"Oprimir la tecla x y la clave es ****"
+}
+,{
+  "categoria":"datáfonos",
+  "problema":"Clave admin datafono credibanco",
+  "solucion":"Oprimir la tecla 0 dos veces, la clave es el codigo unico mas un 0 al principio"
+}
 ]
