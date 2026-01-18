@@ -153,7 +153,7 @@ header h1 {
 
 /* Modal */
 .modal {
-  background: white;
+  background: rgb(112, 109, 109);
   padding: 20px;
   width: 90%;
   max-width: 400px;
