@@ -27,30 +27,38 @@ export function Home() {
 
   const cat = ["", ...new Set(data.map((item) => item.categoria))].sort();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+   e.preventDefault();
 
-    const formData = new FormData(e.target);
+   const formData = new FormData(e.target);
 
-    const payload = {
-      pregunta: formData.get("pregunta"),
-      respuesta: formData.get("respuesta"),
-    };
+   const payload = {
+     pregunta: formData.get("pregunta"),
+     respuesta: formData.get("respuesta"),
+   };
 
-    const res = await fetch("/.netlify/functions/crearSugerencia", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload),
-    });
+   try {
+     const res = await fetch("/.netlify/functions/crearSugerencia", {
+       method: "POST",
+       headers: { "Content-Type": "application/json" },
+       body: JSON.stringify(payload),
+     });
 
-    if (res.ok) {
-      alert("¡Gracias por tu aporte!");
-      setMostrarForm(false);
-    } else {
-      alert("Error al enviar");
-    }
-  };
-  
+     const data = await res.json();
+
+     if (res.ok) {
+       alert("¡Gracias por tu aporte!");
+       setMostrarForm(false);
+       e.target.reset();
+     } else {
+       console.error("Error del servidor:", data);
+       alert(`Error: ${data.error || "Error desconocido"}`);
+     }
+   } catch (error) {
+     console.error("Error de red:", error);
+     alert(`Error de conexión: ${error.message}`);
+   }
+ };
 
   return (
     <>
