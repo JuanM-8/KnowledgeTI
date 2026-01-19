@@ -95,12 +95,10 @@ export function Home() {
         <Cards resultados={resultadosFiltrados} />
       </div>
 
-      {/* Botón flotante */}
       <button className="fab" onClick={() => setMostrarForm(true)}>
         +
       </button>
 
-      {/* Modal */}
       {mostrarForm && (
         <div className="modal-overlay" onClick={() => setMostrarForm(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
