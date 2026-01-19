@@ -1,15 +1,18 @@
 import { createClient } from "@supabase/supabase-js";
 
 export async function handler(event) {
-  // Permitir OPTIONS para CORS
+  // Headers CORS
+  const headers = {
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+  };
+
+  // Manejar preflight request
   if (event.httpMethod === "OPTIONS") {
     return {
       statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-        "Access-Control-Allow-Headers": "Content-Type",
-        "Access-Control-Allow-Methods": "POST, OPTIONS",
-      },
+      headers,
       body: "",
     };
   }
@@ -17,6 +20,7 @@ export async function handler(event) {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
+      headers,
       body: JSON.stringify({ error: "Method not allowed" }),
     };
   }
@@ -27,14 +31,15 @@ export async function handler(event) {
       console.error("Faltan variables de entorno");
       return {
         statusCode: 500,
+        headers,
         body: JSON.stringify({
-          error: "Configuración incorrecta del servidor",
+          error: "Configuración del servidor incorrecta",
         }),
       };
     }
 
     const supabase = createClient(
-      process.env.SUBASE_URL,
+      process.env.SUPABASE_URL,
       process.env.SUPABASE_KEY,
     );
 
@@ -43,6 +48,7 @@ export async function handler(event) {
     if (!pregunta || !respuesta) {
       return {
         statusCode: 400,
+        headers,
         body: JSON.stringify({ error: "Datos incompletos" }),
       };
     }
@@ -55,21 +61,21 @@ export async function handler(event) {
       console.error("Error de Supabase:", error);
       return {
         statusCode: 500,
+        headers,
         body: JSON.stringify({ error: error.message }),
       };
     }
 
     return {
       statusCode: 200,
-      headers: {
-        "Access-Control-Allow-Origin": "*",
-      },
+      headers,
       body: JSON.stringify({ ok: true, data }),
     };
   } catch (err) {
     console.error("Error general:", err);
     return {
       statusCode: 500,
+      headers,
       body: JSON.stringify({ error: err.message }),
     };
   }
