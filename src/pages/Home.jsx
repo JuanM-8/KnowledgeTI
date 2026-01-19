@@ -51,11 +51,9 @@ export function Home() {
        setMostrarForm(false);
        e.target.reset();
      } else {
-       console.error("Error del servidor:", data);
        alert(`Error: ${data.error || "Error desconocido"}`);
      }
    } catch (error) {
-     console.error("Error de red:", error);
      alert(`Error de conexión: ${error.message}`);
    }
  };
@@ -106,7 +104,7 @@ export function Home() {
       {mostrarForm && (
         <div className="modal-overlay" onClick={() => setMostrarForm(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>¿Tienes una solución nueva?</h2>
+            <h2>¿Sabes algun otro error?</h2>
 
             <form onSubmit={handleSubmit}>
               <input
