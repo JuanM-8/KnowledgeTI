@@ -1,20 +1,14 @@
 import { createClient } from "@supabase/supabase-js";
 
 export async function handler(event) {
-  // Headers CORS
   const headers = {
     "Access-Control-Allow-Origin": "*",
     "Access-Control-Allow-Headers": "Content-Type",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
   };
 
-  // Manejar preflight request
   if (event.httpMethod === "OPTIONS") {
-    return {
-      statusCode: 200,
-      headers,
-      body: "",
-    };
+    return { statusCode: 200, headers };
   }
 
   if (event.httpMethod !== "POST") {
@@ -26,24 +20,17 @@ export async function handler(event) {
   }
 
   try {
-    // Verificar variables de entorno
-    if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
-      console.error("Faltan variables de entorno");
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({
-          error: "Configuración del servidor incorrecta",
-        }),
-      };
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY; // 👈 clave
+
+    if (!supabaseUrl || !supabaseKey) {
+      throw new Error("Variables de entorno faltantes");
     }
 
-    const supabase = createClient(
-      process.env.SUPABASE_URL,
-      process.env.SUPABASE_KEY,
-    );
+    const supabase = createClient(supabaseUrl, supabaseKey);
 
-    const { pregunta, respuesta } = JSON.parse(event.body);
+    const body = event.body ? JSON.parse(event.body) : {};
+    const { pregunta, respuesta } = body;
 
     if (!pregunta || !respuesta) {
       return {
@@ -57,14 +44,7 @@ export async function handler(event) {
       .from("sugerencias")
       .insert([{ pregunta, respuesta }]);
 
-    if (error) {
-      console.error("Error de Supabase:", error);
-      return {
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({ error: error.message }),
-      };
-    }
+    if (error) throw error;
 
     return {
       statusCode: 200,
@@ -72,7 +52,7 @@ export async function handler(event) {
       body: JSON.stringify({ ok: true, data }),
     };
   } catch (err) {
-    console.error("Error general:", err);
+    console.error("ERROR REAL:", err);
     return {
       statusCode: 500,
       headers,
