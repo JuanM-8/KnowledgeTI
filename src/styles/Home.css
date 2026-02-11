@@ -80,6 +80,7 @@ header h1 {
   text-transform: uppercase;
   letter-spacing: 2px;
   transition: 0.3s;
+  z-index: 999;
   box-shadow:
     0 0 10px #0ff,
     inset 0 0 10px #0ff;

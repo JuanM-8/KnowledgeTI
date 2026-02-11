@@ -20,7 +20,7 @@
     "solucion": "Servidor: 10.120.111.105 → Carpeta compartida con drivers"
   },
   {
-    "categoria": "biométricos",
+    "categoria": "soporte técnico",
     "problema": "Relojes biométricos Geovictoria",
     "solucion": "Usuario enrolador 15/Contraseña ****, admin 17/Contraseña ****. Configuración en .12 y .13"
   },
@@ -100,19 +100,24 @@
     "solucion": "Para ingresar a las apps de citrix la red debe ser corporativa ya sea Falacorp o por LAN"
   },
   {
-    "categoria":"contraseñas",
-    "problema":"Acceso a cotorra",
-    "solucion":"Usuario y contraseña: rf "
+    "categoria": "contraseñas",
+    "problema": "Acceso a cotorra",
+    "solucion": "Usuario y contraseña: rf "
   },
-  
-{
-  "categoria":"datáfonos",
-  "problema":"Teclado bloqueado",
-  "solucion":"Oprimir la tecla x y la clave es ****"
-}
-,{
-  "categoria":"datáfonos",
-  "problema":"Clave admin datafono credibanco",
-  "solucion":"Oprimir la tecla 0 dos veces, la clave es el codigo unico mas un 0 al principio"
-}
+
+  {
+    "categoria": "datáfonos",
+    "problema": "Teclado bloqueado",
+    "solucion": "Oprimir la tecla x y la clave es ****"
+  },
+  {
+    "categoria": "datáfonos",
+    "problema": "Clave admin datafono credibanco",
+    "solucion": "Oprimir la tecla 0 dos veces, la clave es el codigo unico mas un 0 al principio"
+  },
+  {
+    "categoria": "manuales",
+    "problema": "Manual de IA",
+    "link": "public/manuals/Inteligencia-Artificial-La-Guia-Definitiva-para-Emprendedores-Estudiantes-y-Curiosos-del-Futuro (1).pdf"
+  }
 ]

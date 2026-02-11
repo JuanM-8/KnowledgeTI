@@ -10,53 +10,58 @@ export function Home() {
   const [busqueda, setBusqueda] = useState("");
   const [mostrarForm, setMostrarForm] = useState(false);
 
-  function normalizar(texto) {
+  // 🔒 Función blindada (nunca rompe)
+  function normalizar(texto = "") {
     return texto
+      .toString()
       .toLowerCase()
       .normalize("NFD")
       .replace(/[\u0300-\u036f]/g, "");
   }
 
-  const resultadosFiltrados = data.filter((item) => {
-    return (
-      normalizar(item.problema).includes(normalizar(busqueda)) ||
-      normalizar(item.solucion).includes(normalizar(busqueda)) ||
-      normalizar(item.categoria).includes(normalizar(busqueda))
-    );
-  });
+  // 🧠 Campos donde se busca
+  const camposBusqueda = ["problema", "solucion", "categoria"];
 
+  // 🔍 Filtro refactorizado
+  const resultadosFiltrados = data.filter((item) =>
+    camposBusqueda.some((campo) =>
+      normalizar(item[campo]).includes(normalizar(busqueda)),
+    ),
+  );
+
+  // 📌 Categorías únicas
   const cat = ["", ...new Set(data.map((item) => item.categoria))].sort();
 
- const handleSubmit = async (e) => {
-   e.preventDefault();
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-   const formData = new FormData(e.target);
+    const formData = new FormData(e.target);
 
-   const payload = {
-     pregunta: formData.get("pregunta"),
-     respuesta: formData.get("respuesta"),
-   };
+    const payload = {
+      pregunta: formData.get("pregunta"),
+      respuesta: formData.get("respuesta"),
+    };
 
-   try {
-     const res = await fetch("/.netlify/functions/crearSugerencia", {
-       method: "POST",
-       headers: { "Content-Type": "application/json" },
-       body: JSON.stringify(payload),
-     });
+    try {
+      const res = await fetch("/.netlify/functions/crearSugerencia", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
 
-     const data = await res.json();
+      const data = await res.json();
 
-     if (res.ok) {
-       alert("¡Gracias por tu aporte!");
-       setMostrarForm(false);
-       e.target.reset();
-     } else {
-       alert(`Error: ${data.error || "Error desconocido"}`);
-     }
-   } catch (error) {
-     alert(`Error de conexión: ${error.message}`);
-   }
- };
+      if (res.ok) {
+        alert("¡Gracias por tu aporte!");
+        setMostrarForm(false);
+        e.target.reset();
+      } else {
+        alert(`Error: ${data.error || "Error desconocido"}`);
+      }
+    } catch (error) {
+      alert(`Error de conexión: ${error.message}`);
+    }
+  };
 
   return (
     <>
@@ -66,16 +71,15 @@ export function Home() {
 
       <header>
         <h1>Preguntas y problemas comunes</h1>
-        <div>
-          <input
-            className="search-input"
-            type="text"
-            value={busqueda}
-            autoFocus
-            placeholder="Introduce aqui tu pregunta o problema"
-            onChange={(e) => setBusqueda(e.target.value)}
-          />
-        </div>
+
+        <input
+          className="search-input"
+          type="text"
+          value={busqueda}
+          autoFocus
+          placeholder="Introduce aqui tu pregunta o problema"
+          onChange={(e) => setBusqueda(e.target.value)}
+        />
       </header>
 
       <div className="nav">
@@ -102,7 +106,7 @@ export function Home() {
       {mostrarForm && (
         <div className="modal-overlay" onClick={() => setMostrarForm(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h2>¿Sabes algun otro error?</h2>
+            <h2>¿Sabes algún otro error?</h2>
 
             <form onSubmit={handleSubmit}>
               <input

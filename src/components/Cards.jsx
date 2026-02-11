@@ -8,10 +8,17 @@ export function Cards({ resultados }) {
   return (
     <>
       {resultados.map((item) => (
-        <div className="card" >
+        <div className="card">
           <h3 data-status={item.categoria}>{item.categoria}</h3>
           <h1>{item.problema}</h1>
-          <p>{item.solucion}</p>
+          {item.solucion ? <p>{item.solucion}</p> : null}
+          {item.link ? (
+            <button className="btn-manual">
+              <a href={item.link} target="_blank">
+                Ver manual
+              </a>
+            </button>
+          ) : null}
         </div>
       ))}
     </>

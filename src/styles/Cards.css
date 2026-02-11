@@ -1,13 +1,11 @@
-:root{
-  --color-aplicaciones:#9333EA;
-  --color-servidores:#10B981;
-  --color-contraseñas:#3B82F6;
-  --color-soporte-técnico:#06B6D4;
-  --color-datafonos:#F3F4F6;
-  --color-impresoras:#F59E0B;
-  --color-biometricos:#F43F5E;
-
-
+:root {
+  --color-aplicaciones: #9333ea;
+  --color-servidores: #10b981;
+  --color-contraseñas: #3b82f6;
+  --color-soporte-técnico: #06b6d4;
+  --color-datafonos: #f3f4f6;
+  --color-impresoras: #f59e0b;
+  --color-manuales: #f43f5e;
 }
 
 .card {
@@ -15,7 +13,9 @@
 
   margin: auto;
   width: 20rem;
-  min-height: 20rem;
+  
+  height:20rem;
+  overflow-y: auto;
 
   padding: 1rem;
   border-radius: 20px;
@@ -23,49 +23,77 @@
   transition: 0.2s all;
   background: rgba(255, 255, 255, 0.07);
   backdrop-filter: blur(3.1px);
- 
+
   border: 1px solid rgba(255, 255, 255, 0.22);
+
+  &&::-webkit-scrollbar {
+    width: 0px;
+  }
+
+  
 }
 .card:hover {
   transform: scale(1.03);
 }
-.card h3{
+.card h3 {
   text-transform: capitalize;
 }
-[data-status="contraseñas"]  {
+[data-status="contraseñas"] {
   color: var(--color-contraseñas);
-  
 }
 
-[data-status="soporte técnico"]  {
+[data-status="soporte técnico"] {
   color: var(--color-soporte-técnico);
 }
-[data-status=""]  {
-  color:white;
+[data-status=""] {
+  color: white;
 }
-[data-status="datáfonos"]  {
+[data-status="datáfonos"] {
   color: var(--color-datafonos);
 }
 
 [data-status="impresoras"] {
   color: var(--color-impresoras);
 }
-[data-status="biométricos"]  {
-  color: var(--color-biometricos);
+[data-status="manuales"] {
+  color: var(--color-manuales);
 }
 [data-status="servidores"] {
   color: var(--color-servidores);
 }
 [data-status="aplicaciones"] {
-  color:var(--color-aplicaciones);
+  color: var(--color-aplicaciones);
 }
 .NoCoincidencia {
   width: max-content;
   font-size: 3rem;
 }
+.btn-manual {
+  padding: 10px;
+  align-items: center;
+  background: transparent;
+  border: 2px solid #0ff;
+  color: #0ff;
+  font-size: 18px;
+  border-radius: 6px;
+  cursor: pointer;
 
-@media (max-width: 768px) {
-.card{
-  width: 70%;
+  transition: 0.3s;
+  box-shadow:
+    0 0 10px #0ff,
+    inset 0 0 10px #0ff;
+
+  &&:hover {
+    transform: scale(1.07);
+  }
+
+  > a {
+    text-decoration: none;
+    color: #fff;
+  }
 }
+@media (max-width: 768px) {
+  .card {
+    width: 70%;
+  }
 }
