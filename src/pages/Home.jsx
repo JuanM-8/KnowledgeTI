@@ -1,7 +1,6 @@
 import "../styles/Home.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Cards } from "../components/Cards";
-import data from "../Data.json";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export function Home() {
@@ -9,6 +8,31 @@ export function Home() {
 
   const [busqueda, setBusqueda] = useState("");
   const [mostrarForm, setMostrarForm] = useState(false);
+
+  const [data, setData] = useState([]);
+  const [cargandoData, setCargandoData] = useState(true);
+
+  useEffect(() => {
+    const cargarData = async () => {
+      try {
+        const res = await fetch("/.netlify/functions/obtenerData");
+        const dataResponse = await res.json();
+
+        if (!res.ok) {
+          throw new Error(dataResponse.error || "No se pudo cargar la data");
+        }
+
+        setData(Array.isArray(dataResponse) ? dataResponse : []);
+      } catch (error) {
+        console.error("Error cargando Data.json", error);
+        setData([]);
+      } finally {
+        setCargandoData(false);
+      }
+    };
+
+    cargarData();
+  }, []);
 
   // 🔒 Función blindada (nunca rompe)
   function normalizar(texto = "") {
@@ -81,6 +105,8 @@ export function Home() {
           onChange={(e) => setBusqueda(e.target.value)}
         />
       </header>
+
+      {cargandoData && <p>Cargando base de conocimiento...</p>}
 
       <div className="nav">
         {cat.map((item) => (
