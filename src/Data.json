@@ -25,12 +25,12 @@
     "solucion": "Usuario enrolador 15/Contraseña ****, admin 17/Contraseña ****. Configuración en .12 y .13"
   },
   {
-    "categoria": "datáfonos",
+    "categoria": "soporte técnico",
     "problema": "Datáfono Redeban pantalla azul",
     "solucion": "Cambiarlo → deshabilitar y volver a habilitar"
   },
   {
-    "categoria": "datáfonos",
+    "categoria": "soporte técnico",
     "problema": "Habilitar Datáfono Redeban",
     "solucion": "F2 → ver → Contraseña **** → opcion 6 → deshabilitar → opcion 6 de nuevo → habilitar → verde → rojo → rojo → verde → verde"
   },
@@ -106,18 +106,38 @@
   },
 
   {
-    "categoria": "datáfonos",
+    "categoria": "soporte técnico",
     "problema": "Teclado bloqueado",
     "solucion": "Oprimir la tecla x y la clave es ****"
   },
   {
-    "categoria": "datáfonos",
+    "categoria": "soporte técnico",
     "problema": "Clave admin datafono credibanco",
     "solucion": "Oprimir la tecla 0 dos veces, la clave es el codigo unico mas un 0 al principio"
   },
   {
     "categoria": "manuales",
     "problema": "Manual de IA",
-    "link": "public/manuals/Inteligencia-Artificial-La-Guia-Definitiva-para-Emprendedores-Estudiantes-y-Curiosos-del-Futuro (1).pdf"
+    "link": "manuals/Inteligencia-Artificial-La-Guia-Definitiva-para-Emprendedores-Estudiantes-y-Curiosos-del-Futuro (1).pdf"
+  },
+  {
+    "categoria": "soporte técnico",
+    "problema": "Pantalla rotada (volteada)",
+    "solucion": "oprimir ctrl + alt + flecha hacia arriba o click derecho en el escritorio -> configuracion de pantalla -> orientacion -> Horizontal"
+  },
+  {
+    "categoria": "servidores",
+    "problema": "Revisar usuarios POS en servidores",
+    "solucion": "Ruta en el servidor c:\\precios -> COFA.log"
+  },
+  {
+    "categoria": "manuales",
+    "problema": "Perfilamiento Carnets",
+    "link": "a"
+  },
+  {
+    "categoria": "links",
+    "problema": "Pagina de vendedor",
+    "solucion": "https://www.falabella.com.co/falabella-co/agentlocal/login"
   }
 ]

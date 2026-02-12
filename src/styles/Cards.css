@@ -3,7 +3,7 @@
   --color-servidores: #10b981;
   --color-contraseñas: #3b82f6;
   --color-soporte-técnico: #06b6d4;
-  --color-datafonos: #f3f4f6;
+  --color-links: #f3f4f6;
   --color-impresoras: #f59e0b;
   --color-manuales: #f43f5e;
 }
@@ -48,8 +48,8 @@
 [data-status=""] {
   color: white;
 }
-[data-status="datáfonos"] {
-  color: var(--color-datafonos);
+[data-status="links"] {
+  color: var(--color-links);
 }
 
 [data-status="impresoras"] {
