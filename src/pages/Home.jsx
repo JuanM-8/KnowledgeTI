@@ -1,16 +1,24 @@
 import "../styles/Home.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Cards } from "../components/Cards";
-  import data from "../Data.json";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export function Home() {
   const { logout } = useAuth0();
 
+  const [data, setData] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [mostrarForm, setMostrarForm] = useState(false);
 
-  // 🔒 Función blindada (nunca rompe)
+  // 🔄 Cargar datos desde Supabase (via Netlify Function)
+  useEffect(() => {
+    fetch("/.netlify/functions/getKnowledge")
+      .then((res) => res.json())
+      .then((data) => setData(data))
+      .catch((err) => console.error("Error cargando datos:", err));
+  }, []);
+
+  // 🔒 Normalizador seguro
   function normalizar(texto = "") {
     return texto
       .toString()
@@ -22,16 +30,17 @@ export function Home() {
   // 🧠 Campos donde se busca
   const camposBusqueda = ["problema", "solucion", "categoria"];
 
-  // 🔍 Filtro refactorizado
+  // 🔍 Filtro dinámico
   const resultadosFiltrados = data.filter((item) =>
     camposBusqueda.some((campo) =>
       normalizar(item[campo]).includes(normalizar(busqueda)),
     ),
   );
 
-  // 📌 Categorías únicas
+  // 📌 Categorías únicas dinámicas
   const cat = ["", ...new Set(data.map((item) => item.categoria))].sort();
 
+  // 📝 Enviar sugerencia
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -49,14 +58,14 @@ export function Home() {
         body: JSON.stringify(payload),
       });
 
-      const data = await res.json();
+      const responseData = await res.json();
 
       if (res.ok) {
         alert("¡Gracias por tu aporte!");
         setMostrarForm(false);
         e.target.reset();
       } else {
-        alert(`Error: ${data.error || "Error desconocido"}`);
+        alert(`Error: ${responseData.error || "Error desconocido"}`);
       }
     } catch (error) {
       alert(`Error de conexión: ${error.message}`);
@@ -87,7 +96,6 @@ export function Home() {
           <button
             key={item}
             className="home-button"
-            data-status={item}
             onClick={() => setBusqueda(item)}
           >
             {item === "" ? "Todas" : item}
