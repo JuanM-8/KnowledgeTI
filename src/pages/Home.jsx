@@ -94,6 +94,7 @@ export function Home() {
           <button
             key={item}
             className="home-button"
+            data-status={item}
             onClick={() => setBusqueda(item)}
           >
             {item === "" ? "Todas" : item}
