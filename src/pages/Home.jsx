@@ -1,7 +1,7 @@
 import "../styles/Home.css";
 import { useState } from "react";
 import { Cards } from "../components/Cards";
-import data from "../Data.json";
+  import data from "../Data.json";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export function Home() {
