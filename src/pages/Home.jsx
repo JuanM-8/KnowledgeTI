@@ -5,6 +5,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 export function Home() {
   const { logout } = useAuth0();
+  const [loading, setLoading] = useState(false);
 
   const [data, setData] = useState([]);
   const [busqueda, setBusqueda] = useState("");
@@ -42,8 +43,12 @@ export function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(e.target);
+    // 🚫 Si ya se está enviando, no hacer nada
+    if (loading) return;
 
+    setLoading(true);
+
+    const formData = new FormData(e.target);
     const payload = {
       pregunta: formData.get("pregunta"),
       respuesta: formData.get("respuesta"),
@@ -67,6 +72,8 @@ export function Home() {
       }
     } catch (error) {
       alert(`Error de conexión: ${error.message}`);
+    } finally {
+      setLoading(false); // ✅ Habilitar el botón de nuevo
     }
   };
 
@@ -130,7 +137,9 @@ export function Home() {
                   Cancelar
                 </button>
 
-                <button type="submit">Enviar</button>
+                <button type="submit" disabled={loading}>
+                  {loading ? "Enviando..." : "Enviar"}
+                </button>
               </div>
             </form>
           </div>
