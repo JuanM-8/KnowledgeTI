@@ -1,26 +1,42 @@
 import "../styles/Cards.css";
+
 export function Cards({ resultados }) {
-  if (resultados.length === 0) {
+  if (!resultados || resultados.length === 0) {
     return (
       <p className="NoCoincidencia">No se encontraron coincidencias. 😟</p>
     );
   }
+
   return (
     <>
-      {resultados.map((item) => (
-        <div className="card">
-          <h3 data-status={item.categoria}>{item.categoria}</h3>
-          <h1>{item.problema}</h1>
-          {item.solucion ? <p>{item.solucion}</p> : null}
-          {item.link ? (
-            <button className="btn-manual">
-              <a href={item.link} target="_blank">
+      {resultados.map((item) => {
+        const categoriaNormalizada = (item.categoria || "")
+          .toLowerCase()
+          .trim();
+
+        return (
+          <div className="card" key={item.id || item.problema}>
+            <h3 data-status={categoriaNormalizada}>
+              {item.categoria || "Sin categoría"}
+            </h3>
+
+            <h1>{item.problema}</h1>
+
+            {item.solucion && <p>{item.solucion}</p>}
+
+            {item.link && (
+              <a
+                href={item.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="btn-manual"
+              >
                 Ver manual
               </a>
-            </button>
-          ) : null}
-        </div>
-      ))}
+            )}
+          </div>
+        );
+      })}
     </>
   );
 }
