@@ -18,9 +18,8 @@ export function Home() {
       .catch((err) => console.error("Error cargando datos:", err));
   }, []);
 
-  // 🔒 Normalizador seguro
-  function normalizar(texto = "") {
-    return texto
+  function normalizar(texto) {
+    return (texto || "")
       .toString()
       .toLowerCase()
       .normalize("NFD")
@@ -37,8 +36,7 @@ export function Home() {
     ),
   );
 
-  // 📌 Categorías únicas dinámicas
-  const cat = ["", ...new Set(data.map((item) => item.categoria))].sort();
+  const cat = ["", ...new Set(data.map((item) => item.categoria || ""))].sort();
 
   // 📝 Enviar sugerencia
   const handleSubmit = async (e) => {
