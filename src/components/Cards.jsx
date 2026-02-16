@@ -1,17 +1,17 @@
 import "../styles/Cards.css";
 
 export function Cards({ resultados }) {
-  if (!resultados ) {
-    return (
-      <p className="NoCoincidencia">cargando</p>
-    );
+    if (resultados === null ) {
+      return (
+        <p className="NoCoincidencia">cargando</p>
+      );
 
-    
-  }
+      
+    }
 
-  if (resultados.length === 0) {
-    return <p className="NoCoincidencia">No se encontraron resultados </p>;
-  }
+    if (resultados.length === 0) {
+      return <p className="NoCoincidencia">No resultados </p>;
+    }
 
   return (
     <>
