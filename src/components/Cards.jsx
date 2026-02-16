@@ -1,10 +1,16 @@
 import "../styles/Cards.css";
 
 export function Cards({ resultados }) {
-  if (!resultados || resultados.length === 0) {
+  if (!resultados ) {
     return (
-      <p className="NoCoincidencia">No se encontraron coincidencias. 😟</p>
+      <p className="NoCoincidencia">cargando</p>
     );
+
+    
+  }
+
+  if (resultados.length === 0) {
+    return <p className="NoCoincidencia">No se encontraron resultados </p>;
   }
 
   return (
