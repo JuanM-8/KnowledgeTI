@@ -6,7 +6,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 export function Home() {
   const { logout } = useAuth0();
 
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
   const [busqueda, setBusqueda] = useState("");
   const [mostrarForm, setMostrarForm] = useState(false);
 
