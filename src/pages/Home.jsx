@@ -30,11 +30,13 @@ export function Home() {
   const camposBusqueda = ["problema", "solucion", "categoria"];
 
   // 🔍 Filtro dinámico
-  const resultadosFiltrados = data.filter((item) =>
-    camposBusqueda.some((campo) =>
-      normalizar(item[campo]).includes(normalizar(busqueda)),
-    ),
-  );
+  const resultadosFiltrados = data
+    ? data.filter((item) =>
+        camposBusqueda.some((campo) =>
+          normalizar(item[campo]).includes(normalizar(busqueda)),
+        ),
+      )
+    : null;
 
   const cat = ["", ...new Set(data.map((item) => item.categoria || ""))].sort();
 
