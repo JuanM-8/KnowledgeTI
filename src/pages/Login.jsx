@@ -9,12 +9,11 @@ export default function Login() {
         <main className="access-focus-card">
           <div className="brand-watermark">KNOWLEDGE TI</div>
 
-          <h1>
-            Knowledge TI
-          </h1>
+          <h1>Knowledge TI</h1>
 
           <p className="slogan">
-            KnowledgeTI es tu plataforma digital. Olvídate de los documentos perdidos y de preguntar mil veces lo mismo.
+            Aplicación web desarrollada para centralizar preguntas frecuentes,
+            soluciones y recursos técnicos de forma segura y organizada.
           </p>
 
           <button className="login-btn" onClick={() => loginWithRedirect()}>
