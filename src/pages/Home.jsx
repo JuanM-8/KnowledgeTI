@@ -1,13 +1,15 @@
 import "../styles/Home.css";
 import { useState, useEffect } from "react";
 import { Cards } from "../components/Cards";
+import ChatAI  from "../components/ChatAI";
+
 import { useAuth0 } from "@auth0/auth0-react";
-import { ChatIA } from "../components/ChatAI";
 
 export function Home() {
   const { logout } = useAuth0();
+  const [loading, setLoading] = useState(false);
 
-  const [data, setData] = useState(null);
+  const [data, setData] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [mostrarForm, setMostrarForm] = useState(false);
 
@@ -31,13 +33,11 @@ export function Home() {
   const camposBusqueda = ["problema", "solucion", "categoria"];
 
   // 🔍 Filtro dinámico
-  const resultadosFiltrados = data
-    ? data.filter((item) =>
-        camposBusqueda.some((campo) =>
-          normalizar(item[campo]).includes(normalizar(busqueda)),
-        ),
-      )
-    : null;
+  const resultadosFiltrados = data.filter((item) =>
+    camposBusqueda.some((campo) =>
+      normalizar(item[campo]).includes(normalizar(busqueda)),
+    ),
+  );
 
   const cat = ["", ...new Set(data.map((item) => item.categoria || ""))].sort();
 
@@ -45,8 +45,12 @@ export function Home() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formData = new FormData(e.target);
+    // 🚫 Si ya se está enviando, no hacer nada
+    if (loading) return;
 
+    setLoading(true);
+
+    const formData = new FormData(e.target);
     const payload = {
       pregunta: formData.get("pregunta"),
       respuesta: formData.get("respuesta"),
@@ -70,13 +74,13 @@ export function Home() {
       }
     } catch (error) {
       alert(`Error de conexión: ${error.message}`);
+    } finally {
+      setLoading(false); // ✅ Habilitar el botón de nuevo
     }
   };
 
   return (
     <>
-      <ChatIA />
-
       <button className="logout-btn" onClick={() => logout()}>
         Salir
       </button>
@@ -135,12 +139,15 @@ export function Home() {
                   Cancelar
                 </button>
 
-                <button type="submit">Enviar</button>
+                <button type="submit" disabled={loading}>
+                  {loading ? "Enviando..." : "Enviar"}
+                </button>
               </div>
             </form>
           </div>
         </div>
       )}
+      <ChatAI />
     </>
   );
 }

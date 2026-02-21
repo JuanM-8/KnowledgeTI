@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import "../styles/ChatIA.css";
 
-export function ChatIA() {
+export default function ChatIA() {
   // useState guarda datos que cuando cambian, actualizan la pantalla
   const [mensajes, setMensajes] = useState([]); // historial del chat
   const [input, setInput] = useState(""); // lo que el usuario está escribiendo
