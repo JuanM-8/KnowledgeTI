@@ -42,7 +42,9 @@ export async function handler(event) {
       .select("pregunta, solucion, categoria")
       .or(filtros)
       .limit(5);
-
+console.log("Palabras buscadas:", palabras);
+console.log("Filtros:", filtros);
+console.log("Resultados Supabase:", JSON.stringify(resultados));
     // 6️⃣ Convertimos los resultados en contexto para la IA
     const contexto = resultados?.length
       ? resultados
