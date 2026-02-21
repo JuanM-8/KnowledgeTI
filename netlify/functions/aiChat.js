@@ -19,7 +19,7 @@ export async function handler(event) {
     // 2️⃣ Conectamos a Supabase (igual que en tus otras funciones)
     const supabase = createClient(
       process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
     );
 
     // 3️⃣ Buscamos en tu tabla "knowledge" registros que coincidan
@@ -37,7 +37,7 @@ export async function handler(event) {
       ? resultados
           .map(
             (k) =>
-              `Categoría: ${k.categoria}\nPregunta: ${k.pregunta}\nSolución: ${k.solucion}`
+              `Categoría: ${k.categoria}\nPregunta: ${k.pregunta}\nSolución: ${k.solucion}`,
           )
           .join("\n\n---\n\n")
       : "No hay soluciones relacionadas en la base de datos.";
@@ -71,6 +71,7 @@ Responde en español, de forma clara y paso a paso si es necesario.`,
 
     const data = await response.json();
 
+    console.log("Respuesta de Claude:", JSON.stringify(data));
     // 6️⃣ Devolvemos la respuesta al frontend
     return {
       statusCode: 200,
