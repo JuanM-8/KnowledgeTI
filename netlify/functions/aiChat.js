@@ -20,15 +20,30 @@ export async function handler(event) {
       process.env.SUPABASE_SERVICE_ROLE_KEY,
     );
 
-    // 3️⃣ Buscamos en tu knowledge base
+    // 3️⃣ Dividimos la pregunta en palabras clave individuales
+    // Esto mejora la búsqueda porque no busca la frase completa
+    // sino cada palabra importante por separado
+    const palabras = pregunta
+      .toLowerCase()
+      .split(" ")
+      .filter((p) => p.length > 3); // ignoramos palabras cortas: "el", "de", "con", "que"
+
+    // 4️⃣ Construimos los filtros para cada palabra
+    const filtros = palabras
+      .map(
+        (p) =>
+          `pregunta.ilike.%${p}%,solucion.ilike.%${p}%,categoria.ilike.%${p}%`,
+      )
+      .join(",");
+
+    // 5️⃣ Buscamos en tu knowledge base con los filtros mejorados
     const { data: resultados } = await supabase
       .from("knowledge")
       .select("pregunta, solucion, categoria")
-      .or(`pregunta.ilike.%${pregunta}%,solucion.ilike.%${pregunta}%`)
+      .or(filtros)
       .limit(5);
 
-    // 4️⃣ Convertimos los resultados en contexto para la IA
-    // Esto es lo que le "enseñamos" a la IA antes de que responda
+    // 6️⃣ Convertimos los resultados en contexto para la IA
     const contexto = resultados?.length
       ? resultados
           .map(
@@ -38,7 +53,7 @@ export async function handler(event) {
           .join("\n\n---\n\n")
       : "No hay soluciones relacionadas en la base de datos.";
 
-    // 5️⃣ Llamamos a Groq (gratis)
+    // 7️⃣ Llamamos a Groq
     const response = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
@@ -52,7 +67,6 @@ export async function handler(event) {
           messages: [
             {
               role: "system",
-              // Aquí le decimos a la IA cómo debe comportarse
               content: `Eres un asistente técnico de TI para KnowledgeTI.
 Responde SOLO basándote en las soluciones de la base de conocimiento proporcionada.
 Si la solución está en la base de datos úsala directamente.
@@ -61,7 +75,6 @@ Responde en español de forma clara y paso a paso si es necesario.`,
             },
             {
               role: "user",
-              // Le pasamos el contexto de Supabase + la pregunta
               content: `Base de conocimiento:\n\n${contexto}\n\nPregunta: ${pregunta}`,
             },
           ],
@@ -72,10 +85,10 @@ Responde en español de forma clara y paso a paso si es necesario.`,
     const data = await response.json();
     console.log("Respuesta de Groq:", JSON.stringify(data));
 
-    // 6️⃣ Extraemos el texto de la respuesta
+    // 8️⃣ Extraemos el texto de la respuesta
     const respuesta = data.choices[0].message.content;
 
-    // 7️⃣ Devolvemos la respuesta al frontend
+    // 9️⃣ Devolvemos la respuesta al frontend
     return {
       statusCode: 200,
       headers,
