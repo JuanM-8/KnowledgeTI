@@ -17,7 +17,7 @@ export async function handler(event) {
     // 2️⃣ Conectamos a Supabase
     const supabase = createClient(
       process.env.SUPABASE_URL,
-      process.env.SUPABASE_SERVICE_ROLE_KEY
+      process.env.SUPABASE_SERVICE_ROLE_KEY,
     );
 
     // 3️⃣ Buscamos en tu knowledge base
@@ -28,38 +28,41 @@ export async function handler(event) {
       .limit(5);
 
     // 4️⃣ Convertimos los resultados en contexto para la IA
+    // Esto es lo que le "enseñamos" a la IA antes de que responda
     const contexto = resultados?.length
       ? resultados
           .map(
             (k) =>
-              `Categoría: ${k.categoria}\nPregunta: ${k.pregunta}\nSolución: ${k.solucion}`
+              `Categoría: ${k.categoria}\nPregunta: ${k.pregunta}\nSolución: ${k.solucion}`,
           )
           .join("\n\n---\n\n")
       : "No hay soluciones relacionadas en la base de datos.";
 
-    // 5️⃣ Llamamos a Gemini (gratis)
+    // 5️⃣ Llamamos a Groq (gratis)
     const response = await fetch(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      "https://api.groq.com/openai/v1/chat/completions",
       {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${process.env.GROQ_API_KEY}`,
+        },
         body: JSON.stringify({
-          contents: [
+          model: "llama-3.1-8b-instant",
+          messages: [
             {
-              parts: [
-                {
-                  text: `Eres un asistente técnico de TI para KnowledgeTI.
+              role: "system",
+              // Aquí le decimos a la IA cómo debe comportarse
+              content: `Eres un asistente técnico de TI para KnowledgeTI.
 Responde SOLO basándote en las soluciones de la base de conocimiento proporcionada.
 Si la solución está en la base de datos úsala directamente.
 Si no hay información suficiente dilo claramente.
-Responde en español de forma clara y paso a paso si es necesario.
-
-Base de conocimiento:
-${contexto}
-
-Pregunta: ${pregunta}`,
-                },
-              ],
+Responde en español de forma clara y paso a paso si es necesario.`,
+            },
+            {
+              role: "user",
+              // Le pasamos el contexto de Supabase + la pregunta
+              content: `Base de conocimiento:\n\n${contexto}\n\nPregunta: ${pregunta}`,
             },
           ],
         }),
@@ -67,10 +70,10 @@ Pregunta: ${pregunta}`,
     );
 
     const data = await response.json();
-    console.log("Respuesta de Gemini:", JSON.stringify(data));
+    console.log("Respuesta de Groq:", JSON.stringify(data));
 
     // 6️⃣ Extraemos el texto de la respuesta
-    const respuesta = data.candidates[0].content.parts[0].text;
+    const respuesta = data.choices[0].message.content;
 
     // 7️⃣ Devolvemos la respuesta al frontend
     return {
