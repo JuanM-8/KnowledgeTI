@@ -2,7 +2,7 @@ import "../styles/Home.css";
 import { useState, useEffect } from "react";
 import { Cards } from "../components/Cards";
 import { useAuth0 } from "@auth0/auth0-react";
-import { ChatIA } from "../components/chatAI";
+import { ChatIA } from "../components/ChatAI";
 
 export function Home() {
   const { logout } = useAuth0();
