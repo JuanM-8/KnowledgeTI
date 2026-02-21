@@ -21,36 +21,35 @@ export async function handler(event) {
     );
 
     // 3️⃣ Dividimos la pregunta en palabras clave individuales
-    // Esto mejora la búsqueda porque no busca la frase completa
-    // sino cada palabra importante por separado
     const palabras = pregunta
       .toLowerCase()
       .split(" ")
-      .filter((p) => p.length > 3); // ignoramos palabras cortas: "el", "de", "con", "que"
+      .filter((p) => p.length > 3);
 
     // 4️⃣ Construimos los filtros para cada palabra
     const filtros = palabras
       .map(
         (p) =>
-          `pregunta.ilike.%${p}%,solucion.ilike.%${p}%,categoria.ilike.%${p}%`,
+          `problema.ilike.%${p}%,solucion.ilike.%${p}%,categoria.ilike.%${p}%`,
       )
       .join(",");
 
-    // 5️⃣ Buscamos en tu knowledge base con los filtros mejorados
+    // 5️⃣ Buscamos en tu knowledge base
     const { data: resultados } = await supabase
       .from("knowledge")
-      .select("pregunta, solucion, categoria")
+      .select("problema, solucion, categoria")
       .or(filtros)
       .limit(5);
-console.log("Palabras buscadas:", palabras);
-console.log("Filtros:", filtros);
-console.log("Resultados Supabase:", JSON.stringify(resultados));
+
+    console.log("Palabras buscadas:", palabras);
+    console.log("Resultados Supabase:", JSON.stringify(resultados));
+
     // 6️⃣ Convertimos los resultados en contexto para la IA
     const contexto = resultados?.length
       ? resultados
           .map(
             (k) =>
-              `Categoría: ${k.categoria}\nPregunta: ${k.pregunta}\nSolución: ${k.solucion}`,
+              `Categoría: ${k.categoria}\nProblema: ${k.problema}\nSolución: ${k.solucion}`,
           )
           .join("\n\n---\n\n")
       : "No hay soluciones relacionadas en la base de datos.";
