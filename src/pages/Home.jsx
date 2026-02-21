@@ -1,6 +1,8 @@
 import "../styles/Home.css";
 import { useState, useEffect } from "react";
 import { Cards } from "../components/Cards";
+import ChatAI  from "../components/ChatAI";
+
 import { useAuth0 } from "@auth0/auth0-react";
 
 export function Home() {
@@ -145,6 +147,7 @@ export function Home() {
           </div>
         </div>
       )}
+      <ChatAI />
     </>
   );
 }
