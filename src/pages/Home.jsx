@@ -77,7 +77,7 @@ export function Home() {
     <>
       <ChatIA />
 
-      {/* <button className="logout-btn" onClick={() => logout()}>
+      <button className="logout-btn" onClick={() => logout()}>
         Salir
       </button>
 
@@ -140,7 +140,7 @@ export function Home() {
             </form>
           </div>
         </div>
-      )} */}
+      )}
     </>
   );
 }
