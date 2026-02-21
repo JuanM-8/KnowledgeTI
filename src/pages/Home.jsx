@@ -2,6 +2,7 @@ import "../styles/Home.css";
 import { useState, useEffect } from "react";
 import { Cards } from "../components/Cards";
 import { useAuth0 } from "@auth0/auth0-react";
+import ChatIA from "../components/chatAI";
 
 export function Home() {
   const { logout } = useAuth0();
@@ -74,7 +75,9 @@ export function Home() {
 
   return (
     <>
-      <button className="logout-btn" onClick={() => logout()}>
+      <ChatIA />
+
+      {/* <button className="logout-btn" onClick={() => logout()}>
         Salir
       </button>
 
@@ -137,7 +140,7 @@ export function Home() {
             </form>
           </div>
         </div>
-      )}
+      )} */}
     </>
   );
 }
