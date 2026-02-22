@@ -2,16 +2,13 @@ import { useState, useRef, useEffect } from "react";
 import "../styles/ChatIA.css";
 
 export default function ChatIA() {
-  // useState guarda datos que cuando cambian, actualizan la pantalla
-  const [mensajes, setMensajes] = useState([]); // historial del chat
-  const [input, setInput] = useState(""); // lo que el usuario está escribiendo
-  const [cargando, setCargando] = useState(false); // para mostrar el "..."
+  const [mensajes, setMensajes] = useState([]);
+  const [input, setInput] = useState("");
+  const [cargando, setCargando] = useState(false);
   const [mostrarChat, setMostrarChat] = useState(false);
 
-  // useRef nos da acceso directo al DOM, aquí lo usamos para hacer scroll automático
   const bottomRef = useRef(null);
 
-  // useEffect corre código cuando algo cambia - aquí hacemos scroll cada vez que llega un mensaje
   useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [mensajes]);
@@ -22,21 +19,22 @@ export default function ChatIA() {
     const pregunta = input;
     setInput("");
 
-    // Agregamos el mensaje del usuario al historial inmediatamente
-    setMensajes((prev) => [...prev, { rol: "user", texto: pregunta }]);
+    const nuevosMensajes = [...mensajes, { rol: "user", texto: pregunta }];
+    setMensajes(nuevosMensajes);
     setCargando(true);
 
     try {
-      // Llamamos a nuestra Netlify Function
       const res = await fetch("/.netlify/functions/aiChat", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ pregunta }),
+        body: JSON.stringify({
+          pregunta,
+          historial: nuevosMensajes, // 👈 mandamos todo el historial
+        }),
       });
 
       const { respuesta, fuentes } = await res.json();
 
-      // Agregamos la respuesta de la IA al historial
       setMensajes((prev) => [
         ...prev,
         { rol: "assistant", texto: respuesta, fuentes },
@@ -62,12 +60,13 @@ export default function ChatIA() {
           onClick={() => setMostrarChat(false)}
         >
           <div className="chat-wrapper" onClick={(e) => e.stopPropagation()}>
-           
-
             <div className="chat-mensajes">
               {mensajes.length === 0 && (
                 <div className="chat-empty">
-                  <p>Hola soy Moffy tu asistente virtual, ¿en qué te puedo ayudar hoy?</p>
+                  <p>
+                    Hola soy Moffy tu asistente virtual, ¿en qué te puedo ayudar
+                    hoy?
+                  </p>
                   <p>Pregúntame cualquier problema técnico.</p>
                 </div>
               )}
@@ -84,7 +83,6 @@ export default function ChatIA() {
                 </div>
               )}
 
-              {/* Elemento invisible al final para hacer scroll hacia aquí */}
               <div ref={bottomRef} />
             </div>
 
