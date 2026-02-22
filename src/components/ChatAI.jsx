@@ -6,6 +6,7 @@ export default function ChatIA() {
   const [mensajes, setMensajes] = useState([]); // historial del chat
   const [input, setInput] = useState(""); // lo que el usuario está escribiendo
   const [cargando, setCargando] = useState(false); // para mostrar el "..."
+  const [mostrarChat, setMostrarChat] = useState(false);
 
   // useRef nos da acceso directo al DOM, aquí lo usamos para hacer scroll automático
   const bottomRef = useRef(null);
@@ -51,54 +52,57 @@ export default function ChatIA() {
   };
 
   return (
-    <div className="chat-wrapper">
-      <div className="chat-header">
-        <span>🤖 Asistente KnowledgeTI</span>
-        <small>Basado en tu base de conocimiento</small>
-      </div>
+    <>
+      <button className="btn-chat" onClick={() => setMostrarChat(true)}>
+        <img src="public/IMG/moffyChat.png" alt="" />
+      </button>
+      {mostrarChat && (
+        <div
+          className="modalChat-overlay"
+          onClick={() => setMostrarChat(false)}
+        >
+          <div className="chat-wrapper" onClick={(e) => e.stopPropagation()}>
+           
 
-      <div className="chat-mensajes">
-        {mensajes.length === 0 && (
-          <div className="chat-empty">
-            <p>👋 Hola, ¿en qué te puedo ayudar hoy?</p>
-            <p>Pregúntame cualquier problema técnico.</p>
+            <div className="chat-mensajes">
+              {mensajes.length === 0 && (
+                <div className="chat-empty">
+                  <p>Hola soy Moffy tu asistente virtual, ¿en qué te puedo ayudar hoy?</p>
+                  <p>Pregúntame cualquier problema técnico.</p>
+                </div>
+              )}
+
+              {mensajes.map((m, i) => (
+                <div key={i} className={`burbuja ${m.rol}`}>
+                  <p>{m.texto}</p>
+                </div>
+              ))}
+
+              {cargando && (
+                <div className="burbuja assistant">
+                  <span className="typing">●●●</span>
+                </div>
+              )}
+
+              {/* Elemento invisible al final para hacer scroll hacia aquí */}
+              <div ref={bottomRef} />
+            </div>
+
+            <div className="chat-input">
+              <input
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                onKeyDown={(e) => e.key === "Enter" && enviar()}
+                placeholder="Escribe tu problema..."
+                disabled={cargando}
+              />
+              <button onClick={enviar} disabled={cargando}>
+                {cargando ? "..." : "Enviar"}
+              </button>
+            </div>
           </div>
-        )}
-
-        {mensajes.map((m, i) => (
-          <div key={i} className={`burbuja ${m.rol}`}>
-            <p>{m.texto}</p>
-            {/* Si la IA encontró fuentes en tu KB, las mostramos */}
-            {m.fuentes?.length > 0 && (
-              <span className="fuentes-tag">
-                📚 {m.fuentes.length} solución(es) de la KB
-              </span>
-            )}
-          </div>
-        ))}
-
-        {cargando && (
-          <div className="burbuja assistant">
-            <span className="typing">●●●</span>
-          </div>
-        )}
-
-        {/* Elemento invisible al final para hacer scroll hacia aquí */}
-        <div ref={bottomRef} />
-      </div>
-
-      <div className="chat-input">
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && enviar()}
-          placeholder="Escribe tu problema técnico..."
-          disabled={cargando}
-        />
-        <button onClick={enviar} disabled={cargando}>
-          {cargando ? "..." : "Enviar"}
-        </button>
-      </div>
-    </div>
+        </div>
+      )}
+    </>
   );
 }

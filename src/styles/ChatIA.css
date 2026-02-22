@@ -2,15 +2,41 @@
   display: flex;
   flex-direction: column;
   height: 500px;
-  max-width: 700px;
+  width: 400px;
   margin: 2rem auto;
-  border: 1px solid #2a2a2a;
+  background: rgba(26, 16, 16, 0.808);
+  backdrop-filter: blur(3.1px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   border-radius: 12px;
   overflow: hidden;
-  background: #111;
   font-family: inherit;
+  position: absolute;
+  right: 30px;
+  bottom: 60px;
+  text-align: center;
 }
+.modalChat-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  z-index: 1001;
+}
+.btn-chat {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  position: fixed;
+  right: 20px;
 
+  bottom: 20px;
+}
+.btn-chat img {
+  width: 60px;
+  height: auto;
+}
 .chat-header {
   background: #1a1a1a;
   padding: 1rem 1.5rem;
@@ -82,8 +108,13 @@
 }
 
 @keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.3;
+  }
 }
 
 .chat-input {
@@ -107,13 +138,24 @@
 }
 
 .chat-input button {
-  background: #2563eb;
-  color: white;
-  border: none;
-  padding: 0 1.5rem;
+  background: transparent;
+  border: 2px solid #0ff;
+  color: #0ff;
+  font-size: 18px;
+  padding: 12px 24px;
+  border-radius: 6px;
   cursor: pointer;
-  font-weight: bold;
-  transition: background 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: 0.3s;
+  box-shadow:
+    0 0 2px #0ff,
+    inset 0 0 10px #0ff;
+
+  &&:hover {
+    background: #0ff;
+    color: #121212;
+  }
 }
 
 .chat-input button:hover:not(:disabled) {

@@ -1,7 +1,7 @@
 import "../styles/Home.css";
 import { useState, useEffect } from "react";
 import { Cards } from "../components/Cards";
-import ChatAI  from "../components/ChatAI";
+import ChatAI from "../components/ChatAI";
 
 import { useAuth0 } from "@auth0/auth0-react";
 
@@ -114,11 +114,10 @@ export function Home() {
       <div className="containerCards">
         <Cards resultados={resultadosFiltrados} />
       </div>
-
+      <ChatAI />
       <button className="fab" onClick={() => setMostrarForm(true)}>
         +
       </button>
-
       {mostrarForm && (
         <div className="modal-overlay" onClick={() => setMostrarForm(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -147,7 +146,6 @@ export function Home() {
           </div>
         </div>
       )}
-      <ChatAI />
     </>
   );
 }
