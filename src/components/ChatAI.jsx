@@ -54,7 +54,7 @@ export default function ChatIA() {
   return (
     <>
       <button className="btn-chat" onClick={() => setMostrarChat(true)}>
-        <img src="public/IMG/moffyChat.png" alt="" />
+        <img src="IMG/moffyChat.png" alt="" />
       </button>
       {mostrarChat && (
         <div
