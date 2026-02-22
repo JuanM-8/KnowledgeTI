@@ -40,13 +40,13 @@ footer {
   padding: 0.5rem 1rem;
   color: #ffffff73;
   font-size: 0.9rem;
-  background:transparent;
-  position: relative;
+  background: transparent;
+  position: absolute;
   top: 0;
-  left: 0;      /* 🔥 clave */
-  width: 100%;  /* 🔥 clave */
+  left: 0;
+  width: 100%;
   z-index: 999;
-  
+  box-sizing: border-box;
 }
 
 .spinner {
