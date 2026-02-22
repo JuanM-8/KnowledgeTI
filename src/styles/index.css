@@ -47,6 +47,11 @@ footer {
   width: 100%;
   z-index: 999;
   box-sizing: border-box;
+
+  a{
+  color: #ffffff73;
+
+  }
 }
 
 .spinner {
