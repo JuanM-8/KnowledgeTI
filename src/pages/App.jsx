@@ -9,5 +9,5 @@ export default function App() {
     return <div className="spinner"></div>;
   }
 
-  return <>{isAuthenticated ? <Login /> : <Home />}</>;
+  return <>{isAuthenticated ? <Home /> : <Login />}</>;
 }

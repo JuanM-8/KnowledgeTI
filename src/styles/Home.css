@@ -115,7 +115,7 @@ header h1 {
 
 /* Botón flotante */
 .fab {
- position: fixed;
+  position: fixed;
   bottom: 20px;
   left: 20px;
   width: 50px;
@@ -126,7 +126,7 @@ header h1 {
   font-size: 18px;
   border-radius: 50px;
   cursor: pointer;
-  
+
   transition: 0.3s;
   box-shadow:
     0 0 10px #0ff,
@@ -138,9 +138,6 @@ header h1 {
     transform: scale(1.07);
   }
 }
-  
-    
-
 
 /* Fondo oscuro */
 .modal-overlay {
@@ -171,7 +168,7 @@ header h1 {
   left: 30px;
   bottom: 80px;
   text-align: center;
-transition: all .3s;
+  transition: all 0.3s;
 }
 
 .modal input,
@@ -184,8 +181,6 @@ transition: all .3s;
   outline: none;
   border: 1px solid white;
 }
-
-
 
 .modal-actions {
   display: flex;
@@ -214,9 +209,8 @@ transition: all .3s;
   }
 }
 .modal-actions button:last-child {
-
   border: 2px solid rgb(0, 255, 123);
- 
+
   box-shadow:
     0 0 10px rgb(0, 255, 123),
     inset 0 0 10px rgb(0, 255, 123);

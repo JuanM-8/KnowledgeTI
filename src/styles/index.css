@@ -6,7 +6,9 @@ body {
   margin: auto;
   background: #121212;
   color: #fff;
-  font-family: Space Grotesk, Space Grotesk Fallback;
+  font-family:
+    Space Grotesk,
+    Space Grotesk Fallback;
 }
 .glow {
   position: fixed;
@@ -34,27 +36,18 @@ body {
 }
 
 footer {
-  position: fixed;
-  bottom: 0;
-  right: 0;
+  text-align: center;
   padding: 0.5rem 1rem;
   color: #ffffff73;
   font-size: 0.9rem;
   background: transparent;
-  width: 100%;
-  place-items: end;
-}
-.img-footer {
-  position: relative;
-}
-.img-footer img {
-  width: 50px;
   position: absolute;
-  left: 50%;
-  bottom: 10px;
-  transform: translate(-50%);
+  top: 0;
+  left: 0;
+  width: 100%;
+  z-index: 999;
+  box-sizing: border-box;
 }
-
 
 .spinner {
   margin: auto;

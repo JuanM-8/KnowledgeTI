@@ -13,8 +13,9 @@ createRoot(document.getElementById("root")).render(
       redirect_uri: window.location.origin,
     }}
   >
+    <Footer></Footer>
+
     <span className="glow"></span>
     <App />
-    <Footer></Footer>
-  </Auth0Provider>
+  </Auth0Provider>,
 );
