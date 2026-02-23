@@ -12,8 +12,7 @@
   padding: 14px 28px;
   box-sizing: border-box;
   backdrop-filter: blur(10px);
-  background: rgba(15, 15, 20, 0.6);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  background: transparent;
 }
 
 /* ===== LINKS ===== */
