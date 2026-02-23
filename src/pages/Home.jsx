@@ -2,11 +2,9 @@ import "../styles/Home.css";
 import { useState, useEffect } from "react";
 import { Cards } from "../components/Cards";
 import ChatAI from "../components/ChatAI";
-
 import { useAuth0 } from "@auth0/auth0-react";
 
 export function Home() {
-  const { logout } = useAuth0();
   const [loading, setLoading] = useState(false);
 
   const [data, setData] = useState([]);
@@ -81,9 +79,7 @@ export function Home() {
 
   return (
     <>
-      <button className="logout-btn" onClick={() => logout()}>
-        Salir
-      </button>
+     
 
       <header>
         <h1>Preguntas y problemas comunes</h1>
