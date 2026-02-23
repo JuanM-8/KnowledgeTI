@@ -25,7 +25,7 @@ export default function App() {
           }
         />
         <Route path="/docs" element={<Docs />} />
-        <Route path="/login" element={<Home />} />
+        <Route path="/login" element={<Login />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
