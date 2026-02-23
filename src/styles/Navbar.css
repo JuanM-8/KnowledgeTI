@@ -9,10 +9,11 @@
   align-items: center;
   gap: 16px;
   width: 100%;
-  padding: 14px 28px;
+  padding: 0px 28px;
   box-sizing: border-box;
   backdrop-filter: blur(10px);
   background: transparent;
+  height: 2rem;
 }
 
 /* ===== LINKS ===== */

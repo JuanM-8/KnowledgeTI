@@ -1,5 +1,20 @@
+header {
+  flex-direction: column;
+  display: flex;
+  align-items: self-start;
+  width: 100%;
 
+  > div {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+}
 
+header h1 {
+  font-size: 60px;
+  width: 60%;
+}
 .search-input {
   box-sizing: border-box;
   place-content: center;
@@ -50,9 +65,12 @@
 .home-button:hover {
   transform: scale(1.03);
 }
-
 @media (max-width: 768px) {
- 
+  header h1 {
+    width: 100%;
+    font-size: 30px;
+    text-align: center;
+  }
   .search-input {
     align-items: center;
     width: 80%;

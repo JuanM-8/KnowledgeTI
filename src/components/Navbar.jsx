@@ -8,7 +8,7 @@ export default function Navbar() {
   const enDocs = location.pathname === "/docs";
 
   return (
-    <header className="main-header">
+    <nav className="main-header">
       {!enDocs && <Link to="/docs">Documentación</Link>}
 
       {enDocs &&
@@ -23,6 +23,6 @@ export default function Navbar() {
           Juan Marin
         </a>
       </span>
-    </header>
+    </nav>
   );
 }
