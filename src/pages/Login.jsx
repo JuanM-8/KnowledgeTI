@@ -16,7 +16,16 @@ export default function Login() {
             soluciones y recursos técnicos de forma segura y organizada.
           </p>
 
-          <button className="login-btn" onClick={() => loginWithRedirect()}>
+          <button
+            className="login-btn"
+            onClick={() =>
+              loginWithRedirect({
+                authorizationParams: {
+                  prompt: "login",
+                },
+              })
+            }
+          >
             Entrar con Auth0 🔑
           </button>
         </main>
