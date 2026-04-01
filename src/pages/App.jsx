@@ -9,7 +9,6 @@ import Login from "./Login";
 export default function App() {
   const { isAuthenticated, isLoading } = useAuth0();
 
-  // ⏳ mientras Auth0 carga
   if (isLoading) {
     return <div className="spinner"></div>;
   }
