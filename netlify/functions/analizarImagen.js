@@ -165,7 +165,7 @@ Responde SOLO en este JSON sin texto extra ni backticks:
                 },
                 {
                   type: "text",
-                  text: `Eres un experto en soporte técnico de TI.
+                  text: `Eres un asistente de soporte técnico interno de una empresa.
 
 ERROR DETECTADO EN LA IMAGEN:
 - Mensaje: ${infoError.textoError}
@@ -173,10 +173,15 @@ ERROR DETECTADO EN LA IMAGEN:
 - Descripción: ${infoError.descripcion}
 ${contexto ? `\nCONTEXTO DEL USUARIO:\n${contexto}` : ""}
 
-CASOS SIMILARES RESUELTOS ANTES:
+BASE DE CONOCIMIENTO INTERNA:
 ${contextoKB}
 
-Da la solución paso a paso en español. Si hay casos similares en la base de conocimiento úsalos como guía. Sé directo y práctico. Máximo 5 pasos.`,
+REGLAS ESTRICTAS:
+- Responde ÚNICAMENTE con información de la base de conocimiento interna.
+- Si la base de conocimiento tiene la solución, dala paso a paso.
+- Si la base de conocimiento NO tiene información relacionada, responde exactamente esto: "No encontré solución para este error en la base de conocimiento de la empresa. Consulta con el administrador del sistema."
+- NUNCA inventes soluciones ni uses conocimiento externo.
+- NUNCA sugieras buscar en internet.`,
                 },
               ],
             },
