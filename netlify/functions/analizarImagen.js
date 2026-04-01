@@ -26,7 +26,7 @@ export async function handler(event) {
       };
     }
 
-    // ── 1. Detectar tipo de imagen desde los primeros bytes del base64 ─────
+    // ── 1. Detectar tipo de imagen ─────────────────────────────────────────
     const primerosBytesHex = Buffer.from(imagen.slice(0, 8), "base64").toString(
       "hex",
     );
@@ -35,7 +35,7 @@ export async function handler(event) {
     else if (primerosBytesHex.startsWith("52494646")) mediaType = "image/webp";
     else if (primerosBytesHex.startsWith("47494638")) mediaType = "image/gif";
 
-    // ── 2. Primera llamada a Groq Vision: leer el error de la imagen ───────
+    // ── 2. Groq lee el error de la imagen ─────────────────────────────────
     const lecturaRes = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
@@ -46,32 +46,28 @@ export async function handler(event) {
         },
         body: JSON.stringify({
           model: "meta-llama/llama-4-scout-17b-16e-instruct",
-          max_tokens: 400,
+          max_tokens: 300,
           messages: [
             {
               role: "user",
               content: [
                 {
                   type: "image_url",
-                  image_url: {
-                    url: `data:${mediaType};base64,${imagen}`,
-                  },
+                  image_url: { url: `data:${mediaType};base64,${imagen}` },
                 },
                 {
                   type: "text",
                   text: `Analiza esta captura de pantalla de un error informático.
-Extrae la siguiente información:
-1. El texto exacto del mensaje de error (si lo hay)
-2. El código de error (si lo hay, ej: 0x000000, Error 404, etc.)
-3. El programa o sistema donde ocurre
-4. En una sola frase: describe el tipo de problema técnico
+Extrae:
+1. El texto exacto del mensaje de error
+2. El programa o sistema donde ocurre
+3. Una frase corta describiendo el problema
 
-Responde SOLO en este formato JSON exacto, sin texto adicional ni backticks:
+Responde SOLO en este JSON sin texto extra ni backticks:
 {
-  "textoError": "el texto del mensaje de error o no visible",
-  "codigoError": "código de error o ninguno",
-  "programa": "nombre del programa o sistema o no identificado",
-  "descripcion": "descripción en una frase del problema"
+  "textoError": "texto del error o no visible",
+  "programa": "nombre del programa o no identificado",
+  "descripcion": "descripción breve del problema"
 }`,
                 },
               ],
@@ -83,33 +79,29 @@ Responde SOLO en este formato JSON exacto, sin texto adicional ni backticks:
 
     const lecturaData = await lecturaRes.json();
 
-    // ── 3. Parsear la respuesta JSON de Groq ───────────────────────────────
+    // ── 3. Parsear respuesta ───────────────────────────────────────────────
     let infoError = {
       textoError: "no visible",
-      codigoError: "ninguno",
       programa: "no identificado",
-      descripcion: "Error no identificado",
+      descripcion: "error en pantalla",
     };
 
     try {
-      const textoRespuesta = lecturaData.choices[0].message.content.trim();
-      const jsonMatch = textoRespuesta.match(/\{[\s\S]*\}/);
-      if (jsonMatch) {
-        infoError = JSON.parse(jsonMatch[0]);
-      }
+      const texto = lecturaData.choices[0].message.content.trim();
+      const match = texto.match(/\{[\s\S]*\}/);
+      if (match) infoError = JSON.parse(match[0]);
     } catch {
-      console.log("No se pudo parsear JSON del primer paso, usando defaults");
+      // usa defaults
     }
 
-    // ── 4. Buscar en Supabase errores similares ────────────────────────────
+    // ── 4. Buscar casos similares en Supabase ──────────────────────────────
     const supabase = createClient(
       process.env.SUPABASE_URL,
       process.env.SUPABASE_SERVICE_ROLE_KEY,
     );
 
-    const terminosBusqueda = [
+    const palabrasClave = [
       infoError.textoError,
-      infoError.codigoError,
       infoError.programa,
       infoError.descripcion,
       contexto || "",
@@ -120,16 +112,14 @@ Responde SOLO en este formato JSON exacto, sin texto adicional ni backticks:
       .filter(
         (p) =>
           p.length > 3 &&
-          p !== "visible" &&
-          p !== "ninguno" &&
-          p !== "identificado",
+          !["visible", "ninguno", "identificado", "error"].includes(p),
       );
 
-    const palabrasClave = [...new Set(terminosBusqueda)].slice(0, 5);
+    const unicas = [...new Set(palabrasClave)].slice(0, 5);
 
     let fuentes = [];
-    if (palabrasClave.length > 0) {
-      const filtros = palabrasClave
+    if (unicas.length > 0) {
+      const filtros = unicas
         .map(
           (p) =>
             `problema.ilike.%${p}%,solucion.ilike.%${p}%,categoria.ilike.%${p}%`,
@@ -145,18 +135,15 @@ Responde SOLO en este formato JSON exacto, sin texto adicional ni backticks:
       fuentes = data || [];
     }
 
-    // ── 5. Construir contexto de la base de conocimiento ──────────────────
+    // ── 5. Construir contexto de Supabase para la IA ───────────────────────
     const contextoKB =
       fuentes.length > 0
         ? fuentes
-            .map(
-              (k) =>
-                `Categoría: ${k.categoria}\nProblema: ${k.problema}\nSolución: ${k.solucion}`,
-            )
+            .map((k) => `Problema: ${k.problema}\nSolución: ${k.solucion}`)
             .join("\n\n---\n\n")
-        : "No se encontraron casos similares en la base de conocimiento.";
+        : "No hay casos similares en la base de conocimiento.";
 
-    // ── 6. Segunda llamada a Groq Vision: generar la solución ─────────────
+    // ── 6. Groq genera la solución ─────────────────────────────────────────
     const solucionRes = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
@@ -167,40 +154,29 @@ Responde SOLO en este formato JSON exacto, sin texto adicional ni backticks:
         },
         body: JSON.stringify({
           model: "meta-llama/llama-4-scout-17b-16e-instruct",
-          max_tokens: 800,
+          max_tokens: 700,
           messages: [
             {
               role: "user",
               content: [
                 {
                   type: "image_url",
-                  image_url: {
-                    url: `data:${mediaType};base64,${imagen}`,
-                  },
+                  image_url: { url: `data:${mediaType};base64,${imagen}` },
                 },
                 {
                   type: "text",
-                  text: `Eres un experto en soporte técnico de TI. El usuario tiene este error:
+                  text: `Eres un experto en soporte técnico de TI.
 
-INFORMACIÓN DETECTADA EN LA IMAGEN:
-- Mensaje de error: ${infoError.textoError}
-- Código de error: ${infoError.codigoError}
-- Programa/Sistema: ${infoError.programa}
+ERROR DETECTADO EN LA IMAGEN:
+- Mensaje: ${infoError.textoError}
+- Programa: ${infoError.programa}
 - Descripción: ${infoError.descripcion}
+${contexto ? `\nCONTEXTO DEL USUARIO:\n${contexto}` : ""}
 
-${contexto ? `CONTEXTO ADICIONAL DEL USUARIO:\n${contexto}\n` : ""}
-
-BASE DE CONOCIMIENTO INTERNA (casos similares resueltos anteriormente):
+CASOS SIMILARES RESUELTOS ANTES:
 ${contextoKB}
 
-INSTRUCCIONES:
-- Si hay casos similares en la base de conocimiento, úsalos como guía principal.
-- Da una solución clara, paso a paso, en español.
-- Sé directo y práctico, el usuario necesita resolver esto ahora.
-- Si el error es crítico o requiere especialista, indícalo.
-- Máximo 5 pasos claros y concisos.
-
-Responde SOLO la solución paso a paso, sin repetir el error ni agregar introducciones largas.`,
+Da la solución paso a paso en español. Si hay casos similares en la base de conocimiento úsalos como guía. Sé directo y práctico. Máximo 5 pasos.`,
                 },
               ],
             },
@@ -212,18 +188,13 @@ Responde SOLO la solución paso a paso, sin repetir el error ni agregar introduc
     const solucionData = await solucionRes.json();
     const solucion = solucionData.choices[0].message.content;
 
-
-    // ── 8. Responder al frontend ───────────────────────────────────────────
+    // ── 7. Responder ───────────────────────────────────────────────────────
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({
         solucion,
-        errorIdentificado:
-          infoError.descripcion !== "Error no identificado"
-            ? infoError.descripcion
-            : `${infoError.programa} — ${infoError.textoError}`,
-        categoria,
+        errorIdentificado: infoError.descripcion,
         coincidencias: fuentes.length,
         fuentes: fuentes.map((f) => ({
           problema: f.problema,

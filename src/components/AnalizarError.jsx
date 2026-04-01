@@ -248,12 +248,10 @@ export default function AnalizarError() {
                 <div className="ae-resultado">
                   {/* Encabezado del resultado */}
                   <div className="ae-resultado__header">
-                    <span className="ae-resultado__badge">
-                      {resultado.categoria || "Error detectado"}
-                    </span>
+                    <span className="ae-resultado__badge">Error detectado</span>
                     <span className="ae-resultado__confianza">
                       {resultado.coincidencias > 0
-                        ? `${resultado.coincidencias} caso(s) similar(es) encontrado(s)`
+                        ? `${resultado.coincidencias} caso(s) similar(es) en la base de datos`
                         : "Análisis basado en la imagen"}
                     </span>
                   </div>
