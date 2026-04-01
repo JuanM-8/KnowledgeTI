@@ -2,15 +2,15 @@ import { useState, useRef } from "react";
 import "../styles/AnalizarError.css";
 
 export default function AnalizarError() {
-  const [mostrarPanel, setMostrarPanel]   = useState(false);
-  const [imagen, setImagen]               = useState(null);      // base64
-  const [preview, setPreview]             = useState(null);      // URL para mostrar
-  const [contexto, setContexto]           = useState("");
-  const [cargando, setCargando]           = useState(false);
-  const [resultado, setResultado]         = useState(null);      // { solucion, fuentes, categoria }
-  const [error, setError]                 = useState(null);
-  const [dragging, setDragging]           = useState(false);
-  const inputRef                          = useRef(null);
+  const [mostrarPanel, setMostrarPanel] = useState(false);
+  const [imagen, setImagen] = useState(null); // base64
+  const [preview, setPreview] = useState(null); // URL para mostrar
+  const [contexto, setContexto] = useState("");
+  const [cargando, setCargando] = useState(false);
+  const [resultado, setResultado] = useState(null); // { solucion, fuentes, categoria }
+  const [error, setError] = useState(null);
+  const [dragging, setDragging] = useState(false);
+  const inputRef = useRef(null);
 
   // ── Convertir archivo a base64 ─────────────────────────────────────────
   function leerArchivo(file) {
@@ -29,7 +29,7 @@ export default function AnalizarError() {
     reader.onload = (e) => {
       const base64 = e.target.result.split(",")[1]; // quita el prefijo data:image/...;base64,
       setImagen(base64);
-      setPreview(e.target.result);                   // guarda la URL completa para <img>
+      setPreview(e.target.result); // guarda la URL completa para <img>
     };
     reader.readAsDataURL(file);
   }
@@ -45,6 +45,37 @@ export default function AnalizarError() {
   // ── Selección por input file ───────────────────────────────────────────
   function onFileChange(e) {
     leerArchivo(e.target.files[0]);
+  }
+  // ── 7. Inferir la categoría del problema ──────────────────────────────
+  let categoria = "Soporte Técnico";
+
+  try {
+    if (fuentes.length > 0) {
+      const categorias = fuentes.map((f) => f.categoria).filter(Boolean);
+      if (categorias.length > 0) {
+        const frecuencia = categorias.reduce((acc, c) => {
+          acc[c] = (acc[c] || 0) + 1;
+          return acc;
+        }, {});
+        const entries = Object.entries(frecuencia);
+        if (entries.length > 0) {
+          categoria = entries.sort((a, b) => b[1] - a[1])[0][0];
+        }
+      }
+    } else if (infoError.programa && infoError.programa !== "no identificado") {
+      const prog = infoError.programa.toLowerCase();
+      if (prog.includes("print") || prog.includes("impres"))
+        categoria = "Impresoras";
+      else if (
+        prog.includes("red") ||
+        prog.includes("network") ||
+        prog.includes("internet")
+      )
+        categoria = "Servidores";
+      else categoria = "Aplicaciones";
+    }
+  } catch {
+    categoria = "Soporte Técnico";
   }
 
   // ── Enviar a la Netlify Function ───────────────────────────────────────
@@ -104,9 +135,14 @@ export default function AnalizarError() {
       >
         <span className="fab-analizar__icon">
           {/* Ícono de cámara / ojo */}
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-            <circle cx="12" cy="13" r="4"/>
+          <svg
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2"
+          >
+            <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+            <circle cx="12" cy="13" r="4" />
           </svg>
         </span>
         <span className="fab-analizar__label">Analizar error</span>
@@ -116,37 +152,49 @@ export default function AnalizarError() {
       {mostrarPanel && (
         <div className="ae-overlay" onClick={cerrar}>
           <div className="ae-panel" onClick={(e) => e.stopPropagation()}>
-
             {/* Cabecera */}
             <div className="ae-header">
               <div className="ae-header__left">
                 <h2>Analizar error con IA</h2>
               </div>
-              <button className="ae-close" onClick={cerrar}>✕</button>
+              <button className="ae-close" onClick={cerrar}>
+                ✕
+              </button>
             </div>
 
             {/* Cuerpo */}
             <div className="ae-body">
-
               {/* Zona de carga de imagen */}
               {!preview ? (
                 <div
                   className={`ae-dropzone ${dragging ? "ae-dropzone--active" : ""}`}
-                  onDragOver={(e) => { e.preventDefault(); setDragging(true); }}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    setDragging(true);
+                  }}
                   onDragLeave={() => setDragging(false)}
                   onDrop={onDrop}
                   onClick={() => inputRef.current?.click()}
                 >
-                  <svg className="ae-dropzone__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-                    <rect x="3" y="3" width="18" height="18" rx="3"/>
-                    <path d="M3 15l5-5 4 4 3-3 6 6"/>
-                    <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <svg
+                    className="ae-dropzone__icon"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="1.5"
+                  >
+                    <rect x="3" y="3" width="18" height="18" rx="3" />
+                    <path d="M3 15l5-5 4 4 3-3 6 6" />
+                    <circle cx="8.5" cy="8.5" r="1.5" />
                   </svg>
                   <p className="ae-dropzone__text">
-                    Arrastra la captura de pantalla aquí<br />
+                    Arrastra la captura de pantalla aquí
+                    <br />
                     <span>o haz clic para seleccionar</span>
                   </p>
-                  <p className="ae-dropzone__hint">PNG · JPG · WEBP — máx. 5 MB</p>
+                  <p className="ae-dropzone__hint">
+                    PNG · JPG · WEBP — máx. 5 MB
+                  </p>
                   <input
                     ref={inputRef}
                     type="file"
@@ -175,11 +223,7 @@ export default function AnalizarError() {
               />
 
               {/* Error */}
-              {error && (
-                <div className="ae-error">
-                  ⚠️ {error}
-                </div>
-              )}
+              {error && <div className="ae-error">⚠️ {error}</div>}
 
               {/* Botón analizar */}
               {!resultado && (
@@ -217,7 +261,8 @@ export default function AnalizarError() {
                   {/* Título del error identificado */}
                   {resultado.errorIdentificado && (
                     <p className="ae-resultado__error-id">
-                      <strong>Error detectado:</strong> {resultado.errorIdentificado}
+                      <strong>Error detectado:</strong>{" "}
+                      {resultado.errorIdentificado}
                     </p>
                   )}
 
@@ -233,7 +278,9 @@ export default function AnalizarError() {
                       <h5>Casos similares en la base de conocimiento:</h5>
                       {resultado.fuentes.map((f, i) => (
                         <div key={i} className="ae-resultado__fuente">
-                          <span className="ae-resultado__fuente-cat">{f.categoria}</span>
+                          <span className="ae-resultado__fuente-cat">
+                            {f.categoria}
+                          </span>
                           <span>{f.problema}</span>
                         </div>
                       ))}
@@ -246,7 +293,6 @@ export default function AnalizarError() {
                   </button>
                 </div>
               )}
-
             </div>
           </div>
         </div>
