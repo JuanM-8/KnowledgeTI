@@ -73,7 +73,7 @@ nombres de aplicaciones, códigos, URLs, versiones de sistema operativo, etc.`,
 
 Responde SOLO este JSON sin texto extra ni backticks:
 {
-  "descripcionCompleta": "describe en detalle qué está pasando en la imagen",
+  "descripcionCompleta": "describe lo mas relevante que está pasando en la imagen",
   "textoVisible": "transcribe literalmente TODO el texto que puedas leer",
   "elementosClave": "los elementos más importantes: usuario exacto, app, error, sistema",
   "palabrasClave": "TODAS las palabras clave separadas por coma incluyendo nombres de usuario, apps y errores exactos"
