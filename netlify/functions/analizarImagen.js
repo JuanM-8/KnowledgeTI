@@ -65,14 +65,18 @@ nombres de aplicaciones, códigos, URLs, versiones de sistema operativo, etc.`,
                 },
                 {
                   type: "text",
-                  text: `Analiza esta imagen en detalle. Lee TODO el texto visible.
+                  text: `Analiza esta imagen en detalle. Lee TODO el texto visible con atención especial a:
+- Nombres de usuario que aparezcan en pantalla
+- Nombres de aplicaciones o programas
+- Mensajes de error exactos
+- Sistema operativo visible
 
 Responde SOLO este JSON sin texto extra ni backticks:
 {
   "descripcionCompleta": "describe en detalle qué está pasando en la imagen",
   "textoVisible": "transcribe literalmente TODO el texto que puedas leer",
-  "elementosClave": "los elementos más importantes para identificar el problema: usuario, app, error, sistema",
-  "palabrasClave": "lista de palabras separadas por coma para buscar en base de datos"
+  "elementosClave": "los elementos más importantes: usuario exacto, app, error, sistema",
+  "palabrasClave": "TODAS las palabras clave separadas por coma incluyendo nombres de usuario, apps y errores exactos"
 }`,
                 },
               ],
@@ -108,7 +112,6 @@ Responde SOLO este JSON sin texto extra ni backticks:
       process.env.SUPABASE_SERVICE_ROLE_KEY,
     );
 
-    // Palabras a ignorar (muy comunes, no ayudan a buscar)
     const stopWords = new Set([
       "your",
       "apps",
@@ -129,7 +132,6 @@ Responde SOLO este JSON sin texto extra ni backticks:
       "esto",
       "esta",
       "pero",
-      "como",
       "cuando",
       "donde",
       "error",
@@ -137,6 +139,10 @@ Responde SOLO este JSON sin texto extra ni backticks:
       "and",
       "not",
       "are",
+      "logged",
+      "field",
+      "password",
+      "reset",
     ]);
 
     const todosLosTerminos = [
@@ -148,12 +154,13 @@ Responde SOLO este JSON sin texto extra ni backticks:
       .join(" ")
       .toLowerCase()
       .split(/[\s,]+/)
-      .filter((p) => p.length > 3 && !stopWords.has(p));
+      .filter((p) => p.length > 2 && !stopWords.has(p)); // <- bajé de 3 a 2 caracteres
 
-    const palabrasClave = [...new Set(todosLosTerminos)].slice(0, 8);
+    const palabrasClave = [...new Set(todosLosTerminos)].slice(0, 10); // <- subí a 10
 
     let fuentes = [];
     if (palabrasClave.length > 0) {
+      // Busca cada palabra individualmente en problema Y solucion Y categoria
       const filtros = palabrasClave
         .map(
           (p) =>
@@ -170,6 +177,8 @@ Responde SOLO este JSON sin texto extra ni backticks:
       fuentes = data || [];
     }
 
+    console.log("Palabras buscadas:", palabrasClave);
+    console.log("Resultados encontrados:", fuentes.length);
     // ── 5. Construir contexto de la base de conocimiento ──────────────────
     const contextoKB =
       fuentes.length > 0
