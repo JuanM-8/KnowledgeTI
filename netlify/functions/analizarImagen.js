@@ -164,13 +164,13 @@ Responde SOLO este JSON sin texto extra ni backticks:
       const filtros = palabrasClave
         .map(
           (p) =>
-            `problema.ilike.%${p}%,solucion.ilike.%${p}%,categoria.ilike.%${p}%`,
+            `problema.ilike.%${p}%,solucion.ilike.%${p}%,categoria.ilike.%${p}%,keywords.ilike.%${p}%`,
         )
         .join(",");
 
       const { data } = await supabase
         .from("knowledge")
-        .select("problema, solucion, categoria")
+        .select("problema, solucion, categoria, keywords")
         .or(filtros)
         .limit(4);
 
