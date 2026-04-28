@@ -13,6 +13,7 @@ export default function App() {
     return <div className="spinner"></div>;
   }
 
+<<<<<<< HEAD
   return (
     <>
       <Navbar />
@@ -29,4 +30,7 @@ export default function App() {
       </Routes>
     </>
   );
+=======
+  return <>{isAuthenticated ? <Login /> : <Home />}</>;
+>>>>>>> pruebas
 }

@@ -1,12 +1,15 @@
 import "../styles/Home.css";
 import { useState, useEffect } from "react";
 import { Cards } from "../components/Cards";
+<<<<<<< HEAD
 import ChatAI from "../components/ChatAI";
+=======
+import AnalizarError from "../components/AnalizarError"; // ← NUEVO (reemplaza ChatAI)
+>>>>>>> pruebas
 import { useAuth0 } from "@auth0/auth0-react";
 
 export function Home() {
   const [loading, setLoading] = useState(false);
-
   const [data, setData] = useState([]);
   const [busqueda, setBusqueda] = useState("");
   const [mostrarForm, setMostrarForm] = useState(false);
@@ -27,10 +30,8 @@ export function Home() {
       .replace(/[\u0300-\u036f]/g, "");
   }
 
-  // 🧠 Campos donde se busca
   const camposBusqueda = ["problema", "solucion", "categoria"];
 
-  // 🔍 Filtro dinámico
   const resultadosFiltrados = data.filter((item) =>
     camposBusqueda.some((campo) =>
       normalizar(item[campo]).includes(normalizar(busqueda)),
@@ -42,10 +43,7 @@ export function Home() {
   // 📝 Enviar sugerencia
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // 🚫 Si ya se está enviando, no hacer nada
     if (loading) return;
-
     setLoading(true);
 
     const formData = new FormData(e.target);
@@ -73,14 +71,17 @@ export function Home() {
     } catch (error) {
       alert(`Error de conexión: ${error.message}`);
     } finally {
-      setLoading(false); // ✅ Habilitar el botón de nuevo
+      setLoading(false);
     }
   };
 
   return (
     <>
+<<<<<<< HEAD
      
 
+=======
+>>>>>>> pruebas
       <header>
         <h1>Preguntas y problemas comunes</h1>
 
@@ -110,10 +111,15 @@ export function Home() {
       <div className="containerCards">
         <Cards resultados={resultadosFiltrados} />
       </div>
-      <ChatAI />
+
+      {/* ← NUEVO: Analizador de errores (reemplaza <ChatAI />) */}
+      <AnalizarError />
+
+      {/* Botón + para sugerencias */}
       <button className="fab" onClick={() => setMostrarForm(true)}>
         +
       </button>
+
       {mostrarForm && (
         <div className="modal-overlay" onClick={() => setMostrarForm(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
@@ -126,14 +132,11 @@ export function Home() {
                 placeholder="Pregunta"
                 required
               />
-
               <textarea name="respuesta" placeholder="Respuesta" required />
-
               <div className="modal-actions">
                 <button type="button" onClick={() => setMostrarForm(false)}>
                   Cancelar
                 </button>
-
                 <button type="submit" disabled={loading}>
                   {loading ? "Enviando..." : "Enviar"}
                 </button>
