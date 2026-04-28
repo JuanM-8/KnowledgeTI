@@ -1,11 +1,7 @@
 import "../styles/Home.css";
 import { useState, useEffect } from "react";
 import { Cards } from "../components/Cards";
-<<<<<<< HEAD
-import ChatAI from "../components/ChatAI";
-=======
-import AnalizarError from "../components/AnalizarError"; // ← NUEVO (reemplaza ChatAI)
->>>>>>> pruebas
+import AnalizarError from "../components/AnalizarError";
 import { useAuth0 } from "@auth0/auth0-react";
 
 export function Home() {
@@ -14,7 +10,6 @@ export function Home() {
   const [busqueda, setBusqueda] = useState("");
   const [mostrarForm, setMostrarForm] = useState(false);
 
-  // 🔄 Cargar datos desde Supabase (via Netlify Function)
   useEffect(() => {
     fetch("/.netlify/functions/getKnowledge")
       .then((res) => res.json())
@@ -40,7 +35,6 @@ export function Home() {
 
   const cat = ["", ...new Set(data.map((item) => item.categoria || ""))].sort();
 
-  // 📝 Enviar sugerencia
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
@@ -77,11 +71,6 @@ export function Home() {
 
   return (
     <>
-<<<<<<< HEAD
-     
-
-=======
->>>>>>> pruebas
       <header>
         <h1>Preguntas y problemas comunes</h1>
 
@@ -112,10 +101,8 @@ export function Home() {
         <Cards resultados={resultadosFiltrados} />
       </div>
 
-      {/* ← NUEVO: Analizador de errores (reemplaza <ChatAI />) */}
       <AnalizarError />
 
-      {/* Botón + para sugerencias */}
       <button className="fab" onClick={() => setMostrarForm(true)}>
         +
       </button>
