@@ -248,6 +248,7 @@ ${contextoKB}
       headers,
       body: JSON.stringify({
         solucion,
+        errorIdentificado: infoError.descripcionCompleta,
         coincidencias: fuentes.length,
         fuentes: fuentes.map((f) => ({
           problema: f.problema,
