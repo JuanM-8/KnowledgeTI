@@ -160,21 +160,37 @@ Responde SOLO este JSON sin texto extra ni backticks:
 
     let fuentes = [];
     if (palabrasClave.length > 0) {
-      // Busca cada palabra individualmente en problema Y solucion Y categoria
       const filtros = palabrasClave
         .map(
           (p) =>
-            `problema.ilike.%${p}%,solucion.ilike.%${p}%,categoria.ilike.%${p}%,keywords.ilike.%${p}%`,
+            `problema.ilike.%${p}%,solucion.ilike.%${p}%,categoria.ilike.%${p}%`,
         )
         .join(",");
 
-      const { data } = await supabase
+      const { data: dataBase } = await supabase
         .from("knowledge")
         .select("problema, solucion, categoria, keywords")
         .or(filtros)
         .limit(4);
 
-      fuentes = data || [];
+      const filtrosKeywords = palabrasClave
+        .map((p) => `keywords.ilike.%${p}%`)
+        .join(",");
+
+      const { data: dataKeywords } = await supabase
+        .from("knowledge")
+        .select("problema, solucion, categoria, keywords")
+        .not("keywords", "is", null)
+        .or(filtrosKeywords)
+        .limit(4);
+
+      // Combina ambos resultados sin duplicados
+      const idsVistos = new Set();
+      fuentes = [...(dataBase || []), ...(dataKeywords || [])].filter((f) => {
+        if (idsVistos.has(f.problema)) return false;
+        idsVistos.add(f.problema);
+        return true;
+      });
     }
 
     console.log("Palabras buscadas:", palabrasClave);
