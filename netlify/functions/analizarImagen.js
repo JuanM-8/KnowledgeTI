@@ -199,7 +199,6 @@ REGLAS ESTRICTAS:
       headers,
       body: JSON.stringify({
         solucion,
-        errorIdentificado: infoError.descripcion,
         coincidencias: fuentes.length,
         fuentes: fuentes.map((f) => ({
           problema: f.problema,
