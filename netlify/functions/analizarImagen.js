@@ -35,7 +35,7 @@ export async function handler(event) {
     else if (primerosBytesHex.startsWith("52494646")) mediaType = "image/webp";
     else if (primerosBytesHex.startsWith("47494638")) mediaType = "image/gif";
 
-    // ── 2. Groq lee el error de la imagen ─────────────────────────────────
+    // ── 2. Groq lee la imagen y extrae todo lo relevante ───────────────────
     const lecturaRes = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
@@ -46,8 +46,16 @@ export async function handler(event) {
         },
         body: JSON.stringify({
           model: "meta-llama/llama-4-scout-17b-16e-instruct",
-          max_tokens: 300,
+          max_tokens: 400,
           messages: [
+            {
+              role: "system",
+              content: `Eres un técnico de soporte TI experto en leer capturas de pantalla.
+Tu trabajo es analizar imágenes de errores o problemas informáticos y extraer
+TODA la información relevante que ayude a identificar y solucionar el problema.
+Debes leer TODO el texto visible: mensajes de error, nombres de usuario,
+nombres de aplicaciones, códigos, URLs, versiones de sistema operativo, etc.`,
+            },
             {
               role: "user",
               content: [
@@ -57,17 +65,18 @@ export async function handler(event) {
                 },
                 {
                   type: "text",
-                  text: `Analiza esta captura de pantalla de un error informático.
-Extrae:
-1. El texto exacto del mensaje de error
-2. El programa o sistema donde ocurre
-3. Una frase corta describiendo el problema
+                  text: `Analiza esta imagen en detalle. Lee TODO el texto visible con atención especial a:
+- Nombres de usuario que aparezcan en pantalla
+- Nombres de aplicaciones o programas
+- Mensajes de error exactos
+- Sistema operativo visible
 
-Responde SOLO en este JSON sin texto extra ni backticks:
+Responde SOLO este JSON sin texto extra ni backticks:
 {
-  "textoError": "texto del error o no visible",
-  "programa": "nombre del programa o no identificado",
-  "descripcion": "descripción breve del problema"
+  "descripcionCompleta": "describe lo mas relevante que está pasando en la imagen",
+  "textoVisible": "transcribe literalmente TODO el texto que puedas leer",
+  "elementosClave": "los elementos más importantes: usuario exacto, app, error, sistema",
+  "palabrasClave": "TODAS las palabras clave separadas por coma incluyendo nombres de usuario, apps y errores exactos"
 }`,
                 },
               ],
@@ -79,11 +88,12 @@ Responde SOLO en este JSON sin texto extra ni backticks:
 
     const lecturaData = await lecturaRes.json();
 
-    // ── 3. Parsear respuesta ───────────────────────────────────────────────
+    // ── 3. Parsear respuesta de lectura ────────────────────────────────────
     let infoError = {
-      textoError: "no visible",
-      programa: "no identificado",
-      descripcion: "error en pantalla",
+      descripcionCompleta: "error en pantalla",
+      textoVisible: "",
+      elementosClave: "",
+      palabrasClave: "",
     };
 
     try {
@@ -91,7 +101,9 @@ Responde SOLO en este JSON sin texto extra ni backticks:
       const match = texto.match(/\{[\s\S]*\}/);
       if (match) infoError = JSON.parse(match[0]);
     } catch {
-      // usa defaults
+      console.log(
+        "No se pudo parsear JSON del paso de lectura, usando defaults",
+      );
     }
 
     // ── 4. Buscar casos similares en Supabase ──────────────────────────────
@@ -100,26 +112,56 @@ Responde SOLO en este JSON sin texto extra ni backticks:
       process.env.SUPABASE_SERVICE_ROLE_KEY,
     );
 
-    const palabrasClave = [
-      infoError.textoError,
-      infoError.programa,
-      infoError.descripcion,
+    const stopWords = new Set([
+      "your",
+      "apps",
+      "this",
+      "with",
+      "that",
+      "from",
+      "have",
+      "cannot",
+      "please",
+      "available",
+      "time",
+      "again",
+      "contact",
+      "information",
+      "para",
+      "como",
+      "esto",
+      "esta",
+      "pero",
+      "cuando",
+      "donde",
+      "error",
+      "the",
+      "and",
+      "not",
+      "are",
+      "logged",
+      "field",
+      "password",
+      "reset",
+    ]);
+
+    const todosLosTerminos = [
+      infoError.palabrasClave,
+      infoError.elementosClave,
+      infoError.textoVisible,
       contexto || "",
     ]
       .join(" ")
       .toLowerCase()
-      .split(/\s+/)
-      .filter(
-        (p) =>
-          p.length > 3 &&
-          !["visible", "ninguno", "identificado", "error"].includes(p),
-      );
+      .split(/[\s,]+/)
+      .filter((p) => p.length > 2 && !stopWords.has(p)); // <- bajé de 3 a 2 caracteres
 
-    const unicas = [...new Set(palabrasClave)].slice(0, 5);
+    const palabrasClave = [...new Set(todosLosTerminos)].slice(0, 10); // <- subí a 10
 
     let fuentes = [];
-    if (unicas.length > 0) {
-      const filtros = unicas
+    if (palabrasClave.length > 0) {
+      // Busca cada palabra individualmente en problema Y solucion Y categoria
+      const filtros = palabrasClave
         .map(
           (p) =>
             `problema.ilike.%${p}%,solucion.ilike.%${p}%,categoria.ilike.%${p}%`,
@@ -135,15 +177,17 @@ Responde SOLO en este JSON sin texto extra ni backticks:
       fuentes = data || [];
     }
 
-    // ── 5. Construir contexto de Supabase para la IA ───────────────────────
+    console.log("Palabras buscadas:", palabrasClave);
+    console.log("Resultados encontrados:", fuentes.length);
+    // ── 5. Construir contexto de la base de conocimiento ──────────────────
     const contextoKB =
       fuentes.length > 0
         ? fuentes
             .map((k) => `Problema: ${k.problema}\nSolución: ${k.solucion}`)
             .join("\n\n---\n\n")
-        : "No hay casos similares en la base de conocimiento.";
+        : "No hay casos registrados en la base de conocimiento para este problema.";
 
-    // ── 6. Groq genera la solución ─────────────────────────────────────────
+    // ── 6. Groq genera la solución basada solo en Supabase ─────────────────
     const solucionRes = await fetch(
       "https://api.groq.com/openai/v1/chat/completions",
       {
@@ -154,8 +198,16 @@ Responde SOLO en este JSON sin texto extra ni backticks:
         },
         body: JSON.stringify({
           model: "meta-llama/llama-4-scout-17b-16e-instruct",
-          max_tokens: 700,
+          max_tokens: 300,
           messages: [
+            {
+              role: "system",
+              content: `Eres soporte técnico interno de una empresa.
+REGLA 1: Solo puedes responder con información de la BASE DE CONOCIMIENTO que te dan.
+REGLA 2: Si la base de conocimiento no tiene la solución exacta, responde SOLO esto: "No hay solución registrada para este caso. Contacta al administrador."
+REGLA 3: Prohibido inventar, prohibido dar pasos genéricos, prohibido mencionar internet.
+REGLA 4: Si encuentras la solución, respóndela en máximo 3 líneas.`,
+            },
             {
               role: "user",
               content: [
@@ -165,23 +217,20 @@ Responde SOLO en este JSON sin texto extra ni backticks:
                 },
                 {
                   type: "text",
-                  text: `Eres un asistente de soporte técnico interno de una empresa.
+                  text: `LO QUE SE VE EN LA IMAGEN:
+${infoError.descripcionCompleta}
 
-ERROR DETECTADO EN LA IMAGEN:
-- Mensaje: ${infoError.textoError}
-- Programa: ${infoError.programa}
-- Descripción: ${infoError.descripcion}
-${contexto ? `\nCONTEXTO DEL USUARIO:\n${contexto}` : ""}
+TEXTO VISIBLE EN LA IMAGEN:
+${infoError.textoVisible}
+
+ELEMENTOS CLAVE:
+${infoError.elementosClave}
+${contexto ? `\nCONTEXTO ADICIONAL DEL USUARIO: ${contexto}` : ""}
 
 BASE DE CONOCIMIENTO INTERNA:
 ${contextoKB}
 
-REGLAS ESTRICTAS:
-- Responde ÚNICAMENTE con información de la base de conocimiento interna.
-- Si la base de conocimiento tiene la solución, dala paso a paso.
-- Si la base de conocimiento NO tiene información relacionada, responde exactamente esto: "No encontré solución para este error en la base de conocimiento de la empresa. Consulta con el administrador del sistema."
-- NUNCA inventes soluciones ni uses conocimiento externo.
-- NUNCA sugieras buscar en internet.`,
+¿Hay solución en la base de conocimiento para este caso? Si sí, dala. Si no, di que no hay.`,
                 },
               ],
             },
@@ -193,12 +242,16 @@ REGLAS ESTRICTAS:
     const solucionData = await solucionRes.json();
     const solucion = solucionData.choices[0].message.content;
 
-    // ── 7. Responder ───────────────────────────────────────────────────────
+    // ── 7. Responder al frontend ───────────────────────────────────────────
     return {
       statusCode: 200,
       headers,
       body: JSON.stringify({
         solucion,
+<<<<<<< HEAD
+=======
+        errorIdentificado: infoError.descripcionCompleta,
+>>>>>>> 943300bcdd73293f364d4917ed9bf5b599bf533e
         coincidencias: fuentes.length,
         fuentes: fuentes.map((f) => ({
           problema: f.problema,

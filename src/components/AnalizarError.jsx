@@ -246,16 +246,6 @@ export default function AnalizarError() {
               {/* Resultado */}
               {resultado && (
                 <div className="ae-resultado">
-                  {/* Encabezado del resultado */}
-                  <div className="ae-resultado__header">
-                    <span className="ae-resultado__badge">Error detectado</span>
-                    <span className="ae-resultado__confianza">
-                      {resultado.coincidencias > 0
-                        ? `${resultado.coincidencias} caso(s) similar(es) en la base de datos`
-                        : "Análisis basado en la imagen"}
-                    </span>
-                  </div>
-
                   {/* Título del error identificado */}
                   {resultado.errorIdentificado && (
                     <p className="ae-resultado__error-id">
@@ -269,22 +259,6 @@ export default function AnalizarError() {
                     <h4>Solución</h4>
                     <p>{resultado.solucion}</p>
                   </div>
-
-                  {/* Fuentes de Supabase si las hay */}
-                  {resultado.fuentes && resultado.fuentes.length > 0 && (
-                    <div className="ae-resultado__fuentes">
-                      <h5>Casos similares en la base de conocimiento:</h5>
-                      {resultado.fuentes.map((f, i) => (
-                        <div key={i} className="ae-resultado__fuente">
-                          <span className="ae-resultado__fuente-cat">
-                            {f.categoria}
-                          </span>
-                          <span>{f.problema}</span>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-
                   {/* Botón para analizar otra imagen */}
                   <button className="ae-btn-nuevo" onClick={reset}>
                     ↩ Analizar otro error
