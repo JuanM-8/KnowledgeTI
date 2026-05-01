@@ -6,7 +6,7 @@ import { useAuth0 } from "@auth0/auth0-react";
 
 export function Home() {
   const [loading, setLoading] = useState(false);
-  const [data, setData] = useState([]);
+  const [data, setData] = useState(null);
   const [busqueda, setBusqueda] = useState("");
   const [mostrarForm, setMostrarForm] = useState(false);
 
@@ -14,7 +14,7 @@ export function Home() {
     fetch("/.netlify/functions/getKnowledge")
       .then((res) => res.json())
       .then((data) => setData(data))
-      .catch((err) => console.error("Error cargando datos:", err));
+      .catch(() => setData([]));
   }, []);
 
   function normalizar(texto) {
@@ -27,11 +27,14 @@ export function Home() {
 
   const camposBusqueda = ["problema", "solucion", "categoria"];
 
-  const resultadosFiltrados = data.filter((item) =>
-    camposBusqueda.some((campo) =>
-      normalizar(item[campo]).includes(normalizar(busqueda)),
-    ),
-  );
+  
+  const resultadosFiltrados = data 
+    ? data.filter((item) =>
+        camposBusqueda.some((campo) =>
+          normalizar(item[campo]).includes(normalizar(busqueda)),
+        ),
+      )
+    : null; 
 
   const cat = ["", ...new Set(data.map((item) => item.categoria || ""))].sort();
 
