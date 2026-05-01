@@ -14,6 +14,8 @@ createRoot(document.getElementById("root")).render(
       authorizationParams={{
         redirect_uri: window.location.origin,
       }}
+      cacheLocation="localstorage" // ← guarda el token en localStorage (persiste al recargar)
+      useRefreshTokens={true} // ← renueva el token automáticamente sin pedir login
     >
       <span className="glow"></span>
       <App />
